@@ -44,8 +44,8 @@ Installation
 ------------
 
 Installation is done with `pip3`, which will install a python module
-*gamera-ocr*. See the section "Installation" in `doc/html/index.html` or
-`doc/src/index.txt`.
+*gamera-ocr*. See the section "Installation" in *doc/html/index.html* or
+*doc/src/index.txt*.
 
 
 Authors
