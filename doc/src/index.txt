@@ -189,15 +189,20 @@ Gamera toolkits can be installed, throough pip. Open a
 terminal in the folder and type::
 
     # 1) complie
-	python setup.y build bdist_wheel
+	python3 setup.y build bdist_wheel
 	# 2) install
-	sudo pip install dist/gamera_ocr-*.whl
+	sudo pip3 install dist/gamera_ocr-*.whl
 
 Command 1) compiles the toolkit from the sources and installs it. 
-As the latter requires root privilegue, you need to use ``sudo`` on Linux and MacOS X. 
-On Windows, ``sudo`` is not necessary.
+As the latter requires root privilegue, you need to use ``sudo``
+on Linux and MacOS X. On Windows, ``sudo`` is not necessary.
 
-Note that the script *ocr4gamera* is installed into ``/usr/bin`` on Linux.
+Note that the script *ocr4gamera* is installed into ``/usr/local//bin``
+on Linux.
+
+To generate a source code package in the `dist` subdirectory, use the command
+
+    python3 setupy.py sdist
 
 If you want to regenerate the documentation, go to the ``doc`` directory
 and run the ``gendoc.py`` script. The output will be placed in the ``doc/html/``
