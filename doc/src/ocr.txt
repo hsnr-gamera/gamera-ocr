@@ -1,0 +1,58 @@
+
+OCR
+===
+
+
+segmentation
+------------
+
+``bbox_mcmill``
+```````````````
+
+[object] **bbox_mcmill** ([object *glyphs*], float *section_search_size* = 1.00, float *noise_mltplk* = 1.00, float *large_mltplk* = 20.00, float *stdev_mltplk* = 5.00)
+
+
+:Operates on: ``Image`` [OneBit]
+:Returns: [object]
+:Category: OCR/segmentation
+:Defined in: bbox_merging_mcmillan.py
+:Author: Robert Butz, Karl MacMillan
+
+
+Returns the textlines from image as connected components.
+The segmentation method is adapted from McMillan's segmentation method
+in roman_text.py. It allows a more individual segmentation through
+parameterization.
+    
+Options:
+
+    *glyphs*:
+      This list can be build out of a ``cc_analysis``. On default, this
+      parameter is blank, which will cause the function to call
+      ``cc_analysis`` itself.
+      
+    *section_search_size*
+      This optional parameter adjusts the calculated avg_glyph_size by
+      multipling its value (default=1).
+      
+    *noise_mltplk*
+      With this optional parameter one can adjust the noise_recognition
+      rate independently from the calculated avg_glyph_size (default = 1).
+      Values greater than 1 let the noise_removal detect bigger noise
+      (but maybe even glyphs). Chose smaller values to avoid assigning
+      small glyphs to noise.
+      
+    *large_mltplk*
+      Analog to noise_mltplk one can set this parameter to manipulate the
+      recognition of very large ccs according to the avg_glyph_size
+      (default=20). Higher values lead to a better acceptance of
+      above-average ccs. Beneficial, for example for big capital
+      initials at the beginning of paragraphs such as seen in bibles.
+      
+    *stdev_mltplk*
+      This parameter affects the line finding algorithm by excluding
+      abnormally tall glyphs (default=5). The standard deviation will
+      be calculated and multiplied by this parameter. 
+ 
+
+

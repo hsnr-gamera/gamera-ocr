@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.4.1: http://docutils.sourceforge.net/" />
+<title>OCR Toolkit Developer's Manual</title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="ocr-toolkit-developer-s-manual">
+<h1 class="title">OCR Toolkit Developer's Manual</h1>
+<p><strong>Last modified</strong>: May 21, 2010</p>
+<div class="contents topic">
+<p class="topic-title first"><a id="contents" name="contents">Contents</a></p>
+<ul class="simple">
+<li><a class="reference" href="#overview" id="id3" name="id3">Overview</a></li>
+<li><a class="reference" href="#replacing-the-page-segmentation-method" id="id4" name="id4">Replacing the page segmentation method</a></li>
+<li><a class="reference" href="#let-gamera-s-training-based-grouping-attach-diacritics" id="id5" name="id5">Let Gamera's training based grouping attach diacritics</a></li>
+</ul>
+</div>
+<p>This documentation is for those who want to extend the functionality of the
+OCR toolkit, or who want to customize specific steps of the recognition
+process. For a comprehensive overview over the architecture of this toolkit,
+see section 3 of</p>
+<blockquote>
+C. Dalitz, R. Baston: <a class="reference" href="http://lionel.kr.hsnr.de/~dalitz/data/publications/sr09-ocr-gamera.pdf">Optical Character Recognition with the
+Gamera Framework.</a> In C. Dalitz (Ed.): &quot;Document Image Analysis with
+the Gamera Framework.&quot; Schriftenreihe des Fachbereichs Elektrotechnik und
+Informatik, Hochschule Niederrhein, vol. 8, pp. 53-65, Shaker Verlag (2009)</blockquote>
+<div class="section">
+<h1><a class="toc-backref" href="#id3" id="overview" name="overview">Overview</a></h1>
+<p>The core functionality of this toolkit is implemented in the <a class="reference" href="gamera.toolkits.ocr.classes.Page.html">Page</a> class.
+This class provides a method <em>segment</em>, which segments the page into lines,
+and the lines into characters and words. The segmentation result is stored
+in the property <em>textlines</em>, which is a list of objects from type <a class="reference" href="gamera.toolkits.ocr.classes.Textline.html">Textline</a>.</p>
+<p>To customize the page segmentation process, you can derive a custom class
+from <tt class="docutils literal"><span class="pre">Page</span></tt>, and overwrite some methods. While it is theoretically possible
+to directly overwrite the <em>segment</em> method, it is in most cases more
+desirable to only overwrite one of the methods called in <em>segment</em>, so that
+only a specific part of the segmentation process is replaced. See the
+<a class="reference" href="gamera.toolkits.ocr.classes.Page.html#segment">documentation of Page.segment</a> for information which other methods
+are called in this method.</p>
+<p>In the subsequent sections, we describe two typical use cases:</p>
+<ul class="simple">
+<li>the replacement of the standard page segmentation algorithm with
+something else</li>
+<li>the replacement of the rule based character segmentation with Gamera's
+classification based grouping algorithm.</li>
+</ul>
+</div>
+<div class="section">
+<h1><a class="toc-backref" href="#id4" id="replacing-the-page-segmentation-method" name="replacing-the-page-segmentation-method">Replacing the page segmentation method</a></h1>
+<p>Let us assume you want to use the Gamera core plugin <em>projection_cutting</em>
+for segmenting the page into text lines. To do so, simply derive a custom
+class <em>MyPage</em> from <em>Page</em> and overwrite the <em>page_to_lines</em> method:</p>
+<div class="highlight"><pre><span class="k">class</span> <span class="nc">MyPage</span><span class="p">(</span><span class="n">Page</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">page_to_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ccs_lines</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="o">.</span><span class="n">projection_cutting</span><span class="p">()</span>
+</pre></div>
+<p>This example is obviously very basic; in practice you might want to experiment
+with the input arguments of <em>projection_cutting</em>. You can the use <em>MyPge</em> just
+like <em>Page</em>, and the following code does the same segmentation as
+<em>Page.segment</em>, but with only <em>page_to_lines</em> replaced:</p>
+<div class="highlight"><pre><span class="n">result</span> <span class="o">=</span> <span class="n">MyPage</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+<span class="n">result</span><span class="o">.</span><span class="n">segment</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="section">
+<h1><a class="toc-backref" href="#id5" id="let-gamera-s-training-based-grouping-attach-diacritics" name="let-gamera-s-training-based-grouping-attach-diacritics">Let Gamera's training based grouping attach diacritics</a></h1>
+<p>Now let us assume that you want to let Gamera's classification based
+grouping algorithm join connected components to characters, rather than the
+rule based method built into <tt class="docutils literal"><span class="pre">Page.lines_to_chars</span></tt>. To do so, derive
+a custom class <em>MyPage</em> from <em>Page</em>, that segments the line into characters
+only by a connected component analysis, without any joining of CCs to characters
+(this will be done at a later point):</p>
+<div class="highlight"><pre><span class="c"># segment lines into chars only by CC analysis</span>
+<span class="k">class</span> <span class="nc">MyPage</span><span class="p">(</span><span class="n">Page</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">lines_to_chars</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">dummy</span><span class="p">,</span> <span class="n">subbccs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="o">.</span><span class="n">sub_cc_analysis</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ccs_lines</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">textlines</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">segment</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ccs_lines</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">textlines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Textline</span><span class="p">(</span><span class="n">segment</span><span class="p">,</span> <span class="n">subccs</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+</pre></div>
+<p>Then you must make sure that a classification with grouping is done during
+<tt class="docutils literal"><span class="pre">Page.segment</span></tt>. This is done by passing a callable class derived from
+<a class="reference" href="gamera.toolkits.ocr.classes.ClassifyCCs.html">ClassifyCCs</a> to the contructor of <em>MyPage</em>. As the default definition of
+<em>ClassifyCCs</em> already does what we need, we simply need to create an
+instance thereform:</p>
+<div class="highlight"><pre><span class="c"># create an instance of ClassifyCCs ...</span>
+<span class="n">cknn</span> <span class="o">=</span> <span class="n">knn</span><span class="o">.</span><span class="n">kNNInteractive</span><span class="p">([],</span> \
+           <span class="p">[</span><span class="s">&quot;aspect_ratio&quot;</span><span class="p">,</span> <span class="s">&quot;moments&quot;</span><span class="p">,</span> <span class="s">&quot;volume64regions&quot;</span><span class="p">],</span> <span class="mf">0</span><span class="p">)</span>
+<span class="n">cknn</span><span class="o">.</span><span class="n">from_xml_filename</span><span class="p">(</span><span class="s">&quot;trainingdata.xml&quot;</span><span class="p">)</span>
+<span class="n">classify</span> <span class="o">=</span> <span class="n">ClassifyCCs</span><span class="p">(</span><span class="n">cknn</span><span class="p">)</span>
+<span class="c"># ... and set its property parts_to_group such that the</span>
+<span class="c">#     grouping algorithm will be used during classification</span>
+<span class="n">classify</span><span class="o">.</span><span class="n">parts_to_group</span> <span class="o">=</span> <span class="mf">4</span>
+
+<span class="c"># pass the ClassifyCCs instance to the constructor of MyPage</span>
+<span class="n">page</span> <span class="o">=</span> <span class="n">MyPage</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">classify_ccs</span><span class="o">=</span><span class="n">classify</span><span class="p">)</span>
+<span class="n">page</span><span class="o">.</span><span class="n">segment</span><span class="p">()</span>  <span class="c"># will call classify</span>
+</pre></div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+<title>class Page</title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="class-page">
+<h1 class="title">class <tt class="docutils literal">Page</tt></h1>
+
+<p><strong>Last modified</strong>: April 27, 2023</p>
+<div class="contents topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#page" id="toc-entry-1"><tt class="docutils literal">Page</tt></a><ul>
+<li><a class="reference internal" href="#init" id="toc-entry-2"><tt class="docutils literal">__init__</tt></a></li>
+<li><a class="reference internal" href="#segment" id="toc-entry-3"><tt class="docutils literal">segment</tt></a></li>
+<li><a class="reference internal" href="#page-to-lines-1" id="toc-entry-4"><tt class="docutils literal">page_to_lines</tt></a></li>
+<li><a class="reference internal" href="#order-lines-1" id="toc-entry-5"><tt class="docutils literal">order_lines</tt></a></li>
+<li><a class="reference internal" href="#lines-to-chars-2" id="toc-entry-6"><tt class="docutils literal">lines_to_chars</tt></a></li>
+<li><a class="reference internal" href="#chars-to-words-1" id="toc-entry-7"><tt class="docutils literal">chars_to_words</tt></a></li>
+<li><a class="reference internal" href="#show-lines" id="toc-entry-8"><tt class="docutils literal">show_lines</tt></a></li>
+<li><a class="reference internal" href="#show-glyphs" id="toc-entry-9"><tt class="docutils literal">show_glyphs</tt></a></li>
+<li><a class="reference internal" href="#show-words" id="toc-entry-10"><tt class="docutils literal">show_words</tt></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="page">
+<h1><a class="toc-backref" href="#toc-entry-1"><tt class="docutils literal">Page</tt></a></h1>
+<p>In module <tt class="docutils literal">gamera.toolkits.ocr.classes</tt></p>
+<p><p>The <tt class="docutils literal">Page</tt> object offers the page segmentation functionality by
+providing a <tt class="docutils literal">segment</tt> method. See <a class="reference external" href="#segment">its documentation</a> for more information
+on how to overwrite specific steps of the segmentation process.</p>
+<p>After the call of <tt class="docutils literal">segment</tt>, the segmentation results are stored in the
+following attributes of <tt class="docutils literal">Page</tt>:</p>
+<blockquote>
+<dl class="docutils">
+<dt><strong>textlines</strong></dt>
+<dd>List of <a class="reference external" href="gamera.toolkits.ocr.classes.Textline.html">Textline</a> objects representing all text lines</dd>
+<dt><strong>img</strong></dt>
+<dd>The image to which Ccs in the <em>textlines</em> refer.</dd>
+</dl>
+</blockquote>
+</p>
+<div class="section" id="init">
+<h2><a class="toc-backref" href="#toc-entry-2"><tt class="docutils literal">__init__</tt></a></h2>
+<p>The only required argument in the constructor is the image that is to
+be segmented. Note that the constructor does <em>not</em> do the segmentation; for
+this, you must call the <a class="reference external" href="#segment">segment</a> method.</p>
+<p>Signature:</p>
+<blockquote>
+<tt class="docutils literal">init (image, glyphs=None, classify_ccs=None)</tt></blockquote>
+<p>with</p>
+<blockquote>
+<dl class="docutils">
+<dt><em>image</em>:</dt>
+<dd>The image to be segmented.</dd>
+<dt><em>glyphs</em>:</dt>
+<dd>An optional list of connected components representing the characters
+in the image. In general, this is not needed, but it can be useful
+for bottom up methods starting from already detected characters (e.g.
+by Gamera's classification based character grouping.</dd>
+<dt><em>classify_ccs</em>:</dt>
+<dd>A callable class with the same interface as <a class="reference external" href="gamera.toolkits.ocr.classes.ClassifyCCs.html">ClassifyCCs</a>.
+If given, it will be called during the segmentation process, right after
+the splitting of lines to characters.</dd>
+</dl>
+</blockquote>
+</div>
+<div class="section" id="segment">
+<h2><a class="toc-backref" href="#toc-entry-3"><tt class="docutils literal">segment</tt></a></h2>
+<p>Segments <em>Page.img</em> and stores the result in <em>Page.textlines</em>.
+This method has no arguments.</p>
+<p>It calls the following methods in the given order:</p>
+<blockquote>
+<ul class="simple">
+<li><a class="reference external" href="#page-to-lines">page_to_lines</a> for splitting the page into segments representing text lines</li>
+<li><a class="reference external" href="#order-lines">order_lines</a> for sorting the lines into reading order</li>
+<li><a class="reference external" href="#lines-to-chars">lines_to_chars</a> for splitting all lines into characters</li>
+<li><em>Page.classify_ccs</em> when it is set, i.e., has been passed to the
+constructor (default is that it is not set)</li>
+<li><a class="reference external" href="#chars-to-words">chars_to_words</a> for grouping the characters to words</li>
+</ul>
+</blockquote>
+<p>By overwriting one (or several) of the above functions, you can
+replace specific steps of the segmentation process with custom
+algorithms.</p>
+</div>
+<div class="section" id="page-to-lines-1">
+<h2><a class="toc-backref" href="#toc-entry-4"><tt class="docutils literal">page_to_lines</tt></a></h2>
+<p>Splits the image into segments representing text lines.
+This method has no arguments.</p>
+<p>The current implementation simply calls the <em>bbox_merging</em>
+plugin from the Gamera core with <em>Ey=0</em>, such that the page is not
+split into paragraphs, but into lines.</p>
+<p>The segmentation result is stored in the variable <em>Page.ccs_lines</em>,
+which is a list of the data type <tt class="docutils literal">Cc</tt>, i.e., with each segment (line)
+represented by a different label in the image. This is the interface
+used by all page segmentation plugins in the Gamera core.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When you overwrite this method, make sure that write the
+segmentation result to <em>self.ccs_lines</em>. This member variable
+will then be further processed by <a class="reference external" href="#lines-to-chars">lines_to_chars</a>.</p>
+</div>
+</div>
+<div class="section" id="order-lines-1">
+<h2><a class="toc-backref" href="#toc-entry-5"><tt class="docutils literal">order_lines</tt></a></h2>
+<p>Sorts the segments in <em>Page.ccs_lines</em> into reading order.
+This method has no arguments.</p>
+<p>The current implementation uses the plugin <em>textline_reading_order</em>
+from the Gamera core.</p>
+</div>
+<div class="section" id="lines-to-chars-2">
+<h2><a class="toc-backref" href="#toc-entry-6"><tt class="docutils literal">lines_to_chars</tt></a></h2>
+<p>Splits text lines into characters. Signature:</p>
+<blockquote>
+<tt class="docutils literal">lines_to_chars (lines=None)</tt></blockquote>
+<p><em>lines</em> must be a list of <tt class="docutils literal">Cc</tt> data types, each of them representing
+a text line. When not given (default), <em>Page.ccs_lines</em> is used instead.
+The current implementation calls <em>get_line_glyphs</em> as defined
+in the module <a class="reference external" href="functions.html">ocr_toolkit</a>.</p>
+<p>The result is stored in <em>Page.textlines</em>; the characters are stored
+for each textline in <em>Textline.glyphs</em>.</p>
+</div>
+<div class="section" id="chars-to-words-1">
+<h2><a class="toc-backref" href="#toc-entry-7"><tt class="docutils literal">chars_to_words</tt></a></h2>
+<p>Groups the characters in each <tt class="docutils literal">Textline</tt> from <em>Page.textlines</em>
+to words and stores the result for each <tt class="docutils literal">Textline</tt> in the property
+<em>Textline.words</em>.</p>
+<p>This method has an optional but generally useless argument for the list of
+textlines. It is therefore usually called without arguments.</p>
+<p>The current implementation calls <em>chars_make_words</em> as defined
+in the module <a class="reference external" href="functions.html">ocr_toolkit</a>.</p>
+</div>
+<div class="section" id="show-lines">
+<h2><a class="toc-backref" href="#toc-entry-8"><tt class="docutils literal">show_lines</tt></a></h2>
+<p>Returns an RGB image with all segmented text lines marked by hollow
+rects. Makes only sense after <em>page_to_lines</em> (or <em>segment</em>) has
+been called.</p>
+</div>
+<div class="section" id="show-glyphs">
+<h2><a class="toc-backref" href="#toc-entry-9"><tt class="docutils literal">show_glyphs</tt></a></h2>
+<p>Returns an RGB image with all segmented/grouped characters marked by
+hollow rects. Makes only sense after <em>lines_to_chars</em> (or <em>segment</em>) has
+been called.</p>
+</div>
+<div class="section" id="show-words">
+<h2><a class="toc-backref" href="#toc-entry-10"><tt class="docutils literal">show_words</tt></a></h2>
+<p>Returns an RGB image with all grouped words marked by
+hollow rects. Makes only sense after <em>chars_to_words</em> (or <em>segment</em>) has
+been called..</p>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr class="footer" />
+<span class="raw-html"><div style="text-align:right;">For contact information, see <a href="http://gamera.informatik.hsnr.de/contact.html">http://gamera.informatik.hsnr.de/contact.html</a></div></span>
+</div>
+</body>
+</html>

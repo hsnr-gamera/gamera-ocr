@@ -1,0 +1,28 @@
+=======
+Classes
+=======
+
+Alphabetical
+-------------
+
+
+**C**
+
+ClassifyCCs_ (gamera.toolkits.ocr.classes.ClassifyCCs)
+
+**H**
+
+hocrPage_ (gamera.toolkits.ocr.classes.hocrPage)
+
+**P**
+
+Page_ (gamera.toolkits.ocr.classes.Page)
+
+**T**
+
+Textline_ (gamera.toolkits.ocr.classes.Textline)
+
+.. _ClassifyCCs: gamera.toolkits.ocr.classes.ClassifyCCs.html
+.. _hocrPage: gamera.toolkits.ocr.classes.hocrPage.html
+.. _Page: gamera.toolkits.ocr.classes.Page.html
+.. _Textline: gamera.toolkits.ocr.classes.Textline.html

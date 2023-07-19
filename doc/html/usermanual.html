@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.8.1: http://docutils.sourceforge.net/" />
+<title>OCR Toolkit User's Manual</title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="ocr-toolkit-user-s-manual">
+<h1 class="title">OCR Toolkit User's Manual</h1>
+
+<p><strong>Last modified</strong>: September 01, 2014</p>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#overview" id="id5">Overview</a></li>
+<li><a class="reference internal" href="#using-the-script-ocr4gamera-py" id="id6">Using the script <tt class="docutils literal">ocr4gamera.py</tt></a></li>
+<li><a class="reference internal" href="#using-hocr-format-as-input-or-output" id="id7">Using hOCR format as input or output</a></li>
+<li><a class="reference internal" href="#writing-custom-scripts" id="id8">Writing custom scripts</a></li>
+</ul>
+</div>
+<p>This documentation is for those who want to use the toolkit
+for OCR, but are not interested in extending the toolkit itself.</p>
+<div class="section" id="overview">
+<h1><a class="toc-backref" href="#id5">Overview</a></h1>
+<p>The toolkit provides the functionality to segment an image page into
+text lines, words and characters, to sort them in reading-order,
+and to generate an output string.</p>
+<p>Before you can use the OCR toolkit, you must first train characters
+from sample pages, which will then be used by the toolkit for classifying
+characters:</p>
+<img alt="images/overview.png" src="images/overview.png" />
+<p>Hence the proper use of this toolkit requires the following two steps:</p>
+<ul class="simple">
+<li>training of sample characters on representative document images.
+This step is interactive and is done with the Gamera GUI, as described
+in the <a class="reference external" href="http://gamera.sourceforge.net/doc/html/training_tutorial.html">Gamera training tutorial</a></li>
+<li>recognition of documents with the aid of this training data.
+This step usually runs automatically without user interaction.
+For this purpose, the tools from the present toolkit can be used.</li>
+</ul>
+<p>There are two options to use this toolkit: you can either use the
+script <tt class="docutils literal">ocr4gamera.py</tt> as provided by the toolkit, or you can build your
+own recognition scripts with the aid of the python library functions
+provided by the toolkit. Both alternatives are described below.</p>
+</div>
+<div class="section" id="using-the-script-ocr4gamera-py">
+<h1><a class="toc-backref" href="#id6">Using the script <tt class="docutils literal">ocr4gamera.py</tt></a></h1>
+<p>The <em>ocr4gamera.py</em> script takes an image and already trained data and
+segments the picture into single glyphs. The training-data is used to
+classify those glyphs and converts them into strings. The final text is
+written to standard-out or can optionally be stored in a textfile. Also
+a word by word correction can be performed on the recognized text.</p>
+<p>The end user application <em>ocr4gamera.py</em> will be installed to <tt class="docutils literal">/usr/bin</tt>
+unless you habe explicitly chosen a different location. It can be either
+be applied to a <em>single</em> image with the following typical call:</p>
+<pre class="literal-block">
+ocr4gamera.py x &lt;traindata&gt; --deskew --automatic_group -o &lt;outfile&gt; &lt;imagefile&gt;
+</pre>
+<p>or simultaneously on <em>multiple</em> images with the following typical call:</p>
+<pre class="literal-block">
+ocr4gamera.py x &lt;traindata&gt; --deskew --automatic_group -od &lt;outdir&gt; &lt;imagefile1&gt; &lt;imagefile2&gt; ...
+</pre>
+<p>Note that in the latter case an output <em>directory</em> must be given, into which
+the recognised texts will be written for each <em>&lt;imagefile&gt;</em> as
+<em>&lt;outdir&gt;/`basename &lt;imagefile&gt;`.txt</em>.
+Strictly speaking, the call modus for multiple image files is redundant,
+because the same result can be achieved by calling <em>ocr4gamera.py</em> for each
+image file separately, but it can speed up the recognition because the
+training data only needs to be loaded once.</p>
+<p>The options <em>--deskew</em> and <em>--automatic_group</em> in the above examples
+are optional, but useful in most cases (see below). The complete synopsis
+of the script is:</p>
+<pre class="literal-block">
+ocr4gamera.py -x &lt;trainingdata&gt; [options] &lt;imagefile&gt;
+</pre>
+<p>Options can be in short (one dash, few characters) or long form (two dashes,
+string). When called with <tt class="docutils literal"><span class="pre">-h</span></tt>, <tt class="docutils literal"><span class="pre">--help</span></tt> or an invalid option,
+a usage message will be printed. The other options are:</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">-x</span></tt> <em>trainingdata</em>, <tt class="docutils literal"><span class="pre">--xml-file</span></tt>=<em>trainingdata</em></dt>
+<dd>This option is required. <em>trainingdata</em> must be an xml file created
+with <a class="reference external" href="http://gamera.sourceforge.net/doc/html/training_tutorial.html">Gamera's training dialog</a>.</dd>
+</dl>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">-k</span></tt> <em>k</em>, <tt class="docutils literal"><span class="pre">--k=</span></tt>=<em>k</em></dt>
+<dd>Number of neighbors used by kNN classifier (default is <em>k</em> = 1).</dd>
+<dt><tt class="docutils literal"><span class="pre">-o</span></tt> <em>outfile</em>, <tt class="docutils literal"><span class="pre">--output</span></tt>=<em>outfile</em></dt>
+<dd>Writes the output text to <em>outfile</em>. When not given, the result is
+printed to stdout. Note that this option can anly be used when a
+<em>single</em> image file is processed.</dd>
+<dt><tt class="docutils literal"><span class="pre">-od</span></tt> <em>outdir</em>, <tt class="docutils literal"><span class="pre">--output_directory</span></tt>=<em>outdir</em></dt>
+<dd>Writes for each input image <em>imgfile</em> the recognized text to
+<em>outdir</em>/<em>imgfile</em>.txt. Note that this option cannot be used in
+combination with <tt class="docutils literal"><span class="pre">-o</span></tt> (<tt class="docutils literal"><span class="pre">--outfile</span></tt>).</dd>
+<dt><tt class="docutils literal"><span class="pre">-a</span></tt>, <tt class="docutils literal"><span class="pre">--automatic_group</span></tt></dt>
+<dd>Uses Gamera's automatic grouping algorithm during classification.
+This can be helpful when glyphs are broken.</dd>
+<dt><tt class="docutils literal"><span class="pre">-d</span></tt>, <tt class="docutils literal"><span class="pre">--deskew</span></tt></dt>
+<dd>Does a skew correction before page segmentation.</dd>
+<dt><tt class="docutils literal"><span class="pre">-mf</span></tt> <em>windowsize</em>, <tt class="docutils literal"><span class="pre">--median_filter</span></tt>=<em>windowsize</em></dt>
+<dd>Smooth the input image with a median filter with window size <em>windowsize</em>.
+Default is <em>windowsize</em> = 0, which means no smoothing.</dd>
+<dt><tt class="docutils literal"><span class="pre">-ds</span></tt> <em>size</em>, <tt class="docutils literal"><span class="pre">--despeckle</span></tt>=<em>size</em></dt>
+<dd>Remove all speckles with size &lt;= <em>size</em>.
+Default is <em>size</em> = 0, which means no despeckling.</dd>
+<dt><tt class="docutils literal"><span class="pre">-f</span></tt>, <tt class="docutils literal"><span class="pre">--filter</span></tt></dt>
+<dd>Filter out connected components that are very big or very small.</dd>
+<dt><tt class="docutils literal"><span class="pre">-D</span></tt>, <tt class="docutils literal"><span class="pre">--dictionary_correction</span></tt></dt>
+<dd>Post-processing step called dictionary-check can be enabled here.
+For using this, you must have a unix <tt class="docutils literal">spell</tt> tool installed: by default
+<tt class="docutils literal">aspell</tt> is used; when this is not found, <tt class="docutils literal">ispell</tt> is tried instead.
+Do not forget to install the needed language and turn it on by changing
+the <tt class="docutils literal">LANG</tt> environment variable or set it with the <tt class="docutils literal"><span class="pre">-L</span></tt> option.</dd>
+<dt><tt class="docutils literal"><span class="pre">-L</span></tt> <em>language</em>, <tt class="docutils literal"><span class="pre">--dictionary_language</span></tt>=<em>language</em></dt>
+<dd>Sets the dictionary for the correcting-process. Otherwise the
+locale-settings language (aspell) or the default language (ispell) is used.</dd>
+<dt><tt class="docutils literal"><span class="pre">-e</span></tt> <em>number</em>, <tt class="docutils literal"><span class="pre">--edit_distance</span></tt>=<em>number</em></dt>
+<dd>Sets the max. distance between two words, the recognized and the
+corrected word. The actual distance is calculated by the gamera built in
+function edit_distance. It has to be integer. The default value is 2.</dd>
+<dt><tt class="docutils literal"><span class="pre">-c</span></tt> <em>csv-file</em>, <tt class="docutils literal"><span class="pre">--extra_chars_csvfile</span></tt>=<em>csv_file</em></dt>
+<dd><p class="first">Use a user defined translation table of class names to character strings.
+The <em>csv_file</em> must contain a list of comma separated
+pairs (classname, output)  one pair per line as in the following example
+(the output string after the comma can be any string consisting of unicode
+characters):</p>
+<pre class="last literal-block">
+latin.small.ligature.st,st
+latin.small.ligature.ft,ft
+latin.small.letter.long.s,s
+</pre>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">-R</span></tt> <em>rules</em>, <tt class="docutils literal"><span class="pre">--heuristic_rules</span></tt>=<em>rules</em></dt>
+<dd>apply heuristic rules <em>rules</em> for disambiguation of some chars
+<em>rules</em> can be <tt class="docutils literal">roman</tt> (default) or <tt class="docutils literal">none</tt> (for no rules)</dd>
+<dt><tt class="docutils literal"><span class="pre">-v</span></tt> <em>level</em>, <tt class="docutils literal"><span class="pre">--information</span></tt>=<em>level</em></dt>
+<dd>Set verbosity level to <em>level</em>. When one, debug information is printed
+to stdout. When two, additionally three images are written to the
+current directory: <tt class="docutils literal">debug_lines.png</tt> has the detected textlines marked,
+<tt class="docutils literal">debug_chars.png</tt> has all segmentated characters marked,
+and <tt class="docutils literal">debug_words.png</tt> has all words marked. This can be usefull to
+identify segmentation errors.</dd>
+</dl>
+</div>
+<div class="section" id="using-hocr-format-as-input-or-output">
+<h1><a class="toc-backref" href="#id7">Using hOCR format as input or output</a></h1>
+<p>In addition to plaintext output it is also possible to use the hOCR
+format to also save segmentation information with the recognized text.
+If the ''-ho'' option is selected, you have to make sure that their is an
+output file or directory asigned in either the ''-o'' or ''-od'' option.
+In addition to the text data, the hOCR file will contain the bounding box
+information of the entire image, the textlines and words.
+The file extension ''.html'' will be automaticly added.</p>
+<p>If you want to use another textline algorithm that saves its data in the
+hOCR format you can read the textline bounding box information by using
+the hOCR-input optin ''-hi''. Even if there is more information given in
+the hOCR file, only the information stored in the title of the class
+''ocr_line'' will be used. This option only works on single images.</p>
+<blockquote>
+<p><tt class="docutils literal"><span class="pre">-ho</span></tt> changes output to hOCR format</p>
+<p><tt class="docutils literal"><span class="pre">-hi</span></tt> <em>hocrfile</em> uses textline information of the given hOCR file</p>
+</blockquote>
+</div>
+<div class="section" id="writing-custom-scripts">
+<h1><a class="toc-backref" href="#id8">Writing custom scripts</a></h1>
+<p>If you want to write your own scripts for recognition, you
+can use <tt class="docutils literal">ocr4gamera.py</tt> as a good starting point.</p>
+<p>In order to access the <em>OCR Toolkit</em> classes and functions, you must
+import them at the beginning of your script:</p>
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">gamera.toolkits.ocr.ocr_toolkit</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">gamera.toolkits.ocr.classes</span> <span class="kn">import</span> <span class="n">Textline</span><span class="p">,</span><span class="n">Page</span><span class="p">,</span><span class="n">ClassifyCCs</span>
+</pre></div>
+<p>After that you can segment an image with the <a class="reference external" href="gamera.toolkits.ocr.classes.Page.html">Page</a> class and its
+method <em>segment()</em>:</p>
+<div class="highlight"><pre><span class="n">img</span> <span class="o">=</span> <span class="n">load_image</span><span class="p">(</span><span class="s">&quot;image.png&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">img</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">pixel_type</span> <span class="o">!=</span> <span class="n">ONEBIT</span><span class="p">:</span>
+   <span class="n">img</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">to_onebit</span><span class="p">()</span>
+<span class="n">result_page</span> <span class="o">=</span> <span class="n">Page</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+<span class="n">result_page</span><span class="o">.</span><span class="n">segment</span><span class="p">()</span>
+</pre></div>
+<p>The <tt class="docutils literal">Page</tt> object <em>result_page</em> now contains all segment information like
+textlines, words and characters in reading order. You can then classify
+the characters line-per-line with a knn classifier and print the document
+text:</p>
+<div class="highlight"><pre><span class="c"># load training data into classifier</span>
+<span class="n">cknn</span> <span class="o">=</span> <span class="n">knn</span><span class="o">.</span><span class="n">kNNInteractive</span><span class="p">([],</span> \
+          <span class="p">[</span><span class="s">&quot;aspect_ratio&quot;</span><span class="p">,</span> <span class="s">&quot;moments&quot;</span><span class="p">,</span> <span class="s">&quot;volume64regions&quot;</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">cknn</span><span class="o">.</span><span class="n">from_xml_filename</span><span class="p">(</span><span class="s">&quot;trainingdata.xml&quot;</span><span class="p">)</span>
+
+<span class="c"># classify characters and create output text</span>
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">page</span><span class="o">.</span><span class="n">textlines</span><span class="p">:</span>
+    <span class="n">line</span><span class="o">.</span><span class="n">glyphs</span> <span class="o">=</span> \
+           <span class="n">cknn</span><span class="o">.</span><span class="n">classify_and_update_list_automatic</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">glyphs</span><span class="p">)</span>
+    <span class="n">line</span><span class="o">.</span><span class="n">sort_glyphs</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">&quot;Text of line&quot;</span><span class="p">,</span> <span class="n">textline_to_string</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+</pre></div>
+<p>Note that the function <a class="reference external" href="functions.html#textline-to-string">textline_to_string</a> is global and not bound to
+a class instance. This function requires that class names for characters
+have been chosen according to the <a class="reference external" href="http://www.unicode.org/charts/">standard unicode character names</a>,
+as in the examples of the following table:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="16%" />
+<col width="42%" />
+<col width="42%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Character</th>
+<th class="head">Unicode Name</th>
+<th class="head">Class Name</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="docutils literal">!</tt></td>
+<td><tt class="docutils literal">EXCLAMATION MARK</tt></td>
+<td><tt class="docutils literal">exclamation.mark</tt></td>
+</tr>
+<tr><td><tt class="docutils literal">2</tt></td>
+<td><tt class="docutils literal">DIGIT TWO</tt></td>
+<td><tt class="docutils literal">digit.two</tt></td>
+</tr>
+<tr><td><tt class="docutils literal">A</tt></td>
+<td><tt class="docutils literal">LATIN CAPITAL LETTER A</tt></td>
+<td><tt class="docutils literal">latin.capital.letter.a</tt></td>
+</tr>
+<tr><td><tt class="docutils literal">a</tt></td>
+<td><tt class="docutils literal">LATIN SMALL LETTER A</tt></td>
+<td><tt class="docutils literal">latin.small.letter.a</tt></td>
+</tr>
+</tbody>
+</table>
+<p>For more information on how to fine control the segmentation process,
+see the <a class="reference external" href="developermanual.html">developer's manual</a>.</p>
+</div>
+</div>
+</body>
+</html>

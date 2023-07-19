@@ -1,0 +1,13 @@
+class ``hocrPage``
+==================
+
+``hocrPage``
+------------
+
+In module ``gamera.toolkits.ocr.classes``
+
+.. docstring:: gamera.toolkits.ocr.classes hocrPage
+   :no_title:
+
+.. docstring:: gamera.toolkits.ocr.classes hocrPage __init__
+

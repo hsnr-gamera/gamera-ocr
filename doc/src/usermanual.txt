@@ -1,0 +1,244 @@
+=========================
+OCR Toolkit User's Manual
+=========================
+
+This documentation is for those who want to use the toolkit
+for OCR, but are not interested in extending the toolkit itself.
+
+Overview
+''''''''
+
+The toolkit provides the functionality to segment an image page into
+text lines, words and characters, to sort them in reading-order,
+and to generate an output string.
+
+Before you can use the OCR toolkit, you must first train characters
+from sample pages, which will then be used by the toolkit for classifying
+characters:
+
+.. image:: images/overview.png
+
+Hence the proper use of this toolkit requires the following two steps:
+
+- training of sample characters on representative document images.
+  This step is interactive and is done with the Gamera GUI, as described
+  in the `Gamera training tutorial`__
+- recognition of documents with the aid of this training data.
+  This step usually runs automatically without user interaction.
+  For this purpose, the tools from the present toolkit can be used.
+
+.. __: http://gamera.sourceforge.net/doc/html/training_tutorial.html
+
+There are two options to use this toolkit: you can either use the 
+script ``ocr4gamera.py`` as provided by the toolkit, or you can build your
+own recognition scripts with the aid of the python library functions
+provided by the toolkit. Both alternatives are described below.
+
+
+Using the script ``ocr4gamera.py``
+''''''''''''''''''''''''''''''''''
+
+The *ocr4gamera.py* script takes an image and already trained data and 
+segments the picture into single glyphs. The training-data is used to 
+classify those glyphs and converts them into strings. The final text is 
+written to standard-out or can optionally be stored in a textfile. Also 
+a word by word correction can be performed on the recognized text.
+
+The end user application *ocr4gamera.py* will be installed to ``/usr/bin`` 
+unless you habe explicitly chosen a different location. It can be either
+be applied to a *single* image with the following typical call::
+
+    ocr4gamera.py x <traindata> --deskew --automatic_group -o <outfile> <imagefile>
+
+or simultaneously on *multiple* images with the following typical call::
+
+    ocr4gamera.py x <traindata> --deskew --automatic_group -od <outdir> <imagefile1> <imagefile2> ...
+
+Note that in the latter case an output *directory* must be given, into which
+the recognised texts will be written for each *<imagefile>* as
+*<outdir>/`basename <imagefile>`.txt*.
+Strictly speaking, the call modus for multiple image files is redundant,
+because the same result can be achieved by calling *ocr4gamera.py* for each
+image file separately, but it can speed up the recognition because the 
+training data only needs to be loaded once. 
+
+The options *--deskew* and *--automatic_group* in the above examples
+are optional, but useful in most cases (see below). The complete synopsis
+of the script is::
+
+    ocr4gamera.py -x <trainingdata> [options] <imagefile>
+
+Options can be in short (one dash, few characters) or long form (two dashes,
+string). When called with ``-h``, ``--help`` or an invalid option,
+a usage message will be printed. The other options are:
+
+``-x`` *trainingdata*, ``--xml-file``\ =\ *trainingdata*
+  This option is required. *trainingdata* must be an xml file created
+  with `Gamera's training dialog`__.
+
+.. __: http://gamera.sourceforge.net/doc/html/training_tutorial.html
+
+``-k`` *k*, ``--k=``\ =\ *k*
+  Number of neighbors used by kNN classifier (default is *k* = 1).
+
+``-o`` *outfile*, ``--output``\ =\ *outfile*
+  Writes the output text to *outfile*. When not given, the result is
+  printed to stdout. Note that this option can anly be used when a
+  *single* image file is processed.
+
+``-od`` *outdir*, ``--output_directory``\ =\ *outdir*
+  Writes for each input image *imgfile* the recognized text to 
+  *outdir*/*imgfile*.txt. Note that this option cannot be used in
+  combination with ``-o`` (``--outfile``).
+
+``-a``, ``--automatic_group``
+  Uses Gamera's automatic grouping algorithm during classification.
+  This can be helpful when glyphs are broken.
+
+``-d``, ``--deskew``
+  Does a skew correction before page segmentation.
+
+``-mf`` *windowsize*, ``--median_filter``\ =\ *windowsize*
+  Smooth the input image with a median filter with window size *windowsize*.
+  Default is *windowsize* = 0, which means no smoothing.
+
+``-ds`` *size*, ``--despeckle``\ =\ *size*
+  Remove all speckles with size <= *size*.
+  Default is *size* = 0, which means no despeckling.
+
+``-f``, ``--filter``
+  Filter out connected components that are very big or very small.
+
+``-D``, ``--dictionary_correction``
+  Post-processing step called dictionary-check can be enabled here.
+  For using this, you must have a unix ``spell`` tool installed: by default
+  ``aspell`` is used; when this is not found, ``ispell`` is tried instead.
+  Do not forget to install the needed language and turn it on by changing
+  the ``LANG`` environment variable or set it with the ``-L`` option.
+
+``-L`` *language*, ``--dictionary_language``\ =\ *language*
+  Sets the dictionary for the correcting-process. Otherwise the
+  locale-settings language (aspell) or the default language (ispell) is used.
+
+``-e`` *number*, ``--edit_distance``\ =\ *number*
+  Sets the max. distance between two words, the recognized and the 
+  corrected word. The actual distance is calculated by the gamera built in
+  function edit_distance. It has to be integer. The default value is 2.
+
+``-c`` *csv-file*, ``--extra_chars_csvfile``\ =\ *csv_file*
+  Use a user defined translation table of class names to character strings.
+  The *csv_file* must contain a list of comma separated 
+  pairs (classname, output)  one pair per line as in the following example
+  (the output string after the comma can be any string consisting of unicode
+  characters):
+
+  ::
+
+    latin.small.ligature.st,st
+    latin.small.ligature.ft,ft
+    latin.small.letter.long.s,s
+
+``-R`` *rules*, ``--heuristic_rules``\ =\ *rules*
+  apply heuristic rules *rules* for disambiguation of some chars
+  *rules* can be ``roman`` (default) or ``none`` (for no rules)
+
+``-v`` *level*, ``--information``\ =\ *level*
+  Set verbosity level to *level*. When one, debug information is printed
+  to stdout. When two, additionally three images are written to the
+  current directory: ``debug_lines.png`` has the detected textlines marked,
+  ``debug_chars.png`` has all segmentated characters marked,
+  and ``debug_words.png`` has all words marked. This can be usefull to
+  identify segmentation errors.
+
+Using hOCR format as input or output
+'''''''''''''''''''''''''''''''''''''
+
+In addition to plaintext output it is also possible to use the hOCR
+format to also save segmentation information with the recognized text.
+If the ''-ho'' option is selected, you have to make sure that their is an
+output file or directory asigned in either the ''-o'' or ''-od'' option.
+In addition to the text data, the hOCR file will contain the bounding box
+information of the entire image, the textlines and words. 
+The file extension ''.html'' will be automaticly added.
+
+If you want to use another textline algorithm that saves its data in the
+hOCR format you can read the textline bounding box information by using
+the hOCR-input optin ''-hi''. Even if there is more information given in 
+the hOCR file, only the information stored in the title of the class
+''ocr_line'' will be used. This option only works on single images.
+
+  ``-ho`` changes output to hOCR format
+
+  ``-hi`` *hocrfile* uses textline information of the given hOCR file
+
+Writing custom scripts
+''''''''''''''''''''''
+
+If you want to write your own scripts for recognition, you
+can use ``ocr4gamera.py`` as a good starting point.
+
+In order to access the *OCR Toolkit* classes and functions, you must
+import them at the beginning of your script:
+
+.. code:: Python
+
+   from gamera.toolkits.ocr.ocr_toolkit import *
+   from gamera.toolkits.ocr.classes import Textline,Page,ClassifyCCs
+
+After that you can segment an image with the Page__ class and its
+method *segment()*:
+
+.. __:  gamera.toolkits.ocr.classes.Page.html
+
+.. code:: Python
+
+   img = load_image("image.png")
+   if img.data.pixel_type != ONEBIT:
+      img = img.to_onebit()
+   result_page = Page(img)
+   result_page.segment()
+
+The ``Page`` object *result_page* now contains all segment information like 
+textlines, words and characters in reading order. You can then classify
+the characters line-per-line with a knn classifier and print the document
+text:
+
+.. code:: Python
+
+   # load training data into classifier
+   cknn = knn.kNNInteractive([], \
+             ["aspect_ratio", "moments", "volume64regions"], 0)
+   cknn.from_xml_filename("trainingdata.xml")  
+
+   # classify characters and create output text
+   for line in page.textlines:
+       line.glyphs = \
+              cknn.classify_and_update_list_automatic(line.glyphs)
+       line.sort_glyphs()
+       print "Text of line", textline_to_string(line)
+
+Note that the function `textline_to_string`_ is global and not bound to
+a class instance. This function requires that class names for characters
+have been chosen according to the `standard unicode character names`_,
+as in the examples of the following table:
+
+.. _`textline_to_string`: functions.html#textline-to-string
+.. _`standard unicode character names`: http://www.unicode.org/charts/
+
+
++-----------+----------------------------+----------------------------+
+| Character | Unicode Name               | Class Name                 |
++===========+============================+============================+
+| ``!``     | ``EXCLAMATION MARK``       | ``exclamation.mark``       |
++-----------+----------------------------+----------------------------+
+| ``2``     | ``DIGIT TWO``              | ``digit.two``              |
++-----------+----------------------------+----------------------------+
+| ``A``     | ``LATIN CAPITAL LETTER A`` | ``latin.capital.letter.a`` |
++-----------+----------------------------+----------------------------+
+| ``a``     | ``LATIN SMALL LETTER A``   | ``latin.small.letter.a``   |
++-----------+----------------------------+----------------------------+
+
+For more information on how to fine control the segmentation process,
+see the `developer's manual`__.
+
+.. __: developermanual.html

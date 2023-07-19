@@ -1,0 +1,43 @@
+=============================
+OCR Toolkit: Global Functions
+=============================
+
+The toolkit defines a number of free function which are not image
+methods. These are defined in *ocr_toolkit.py* and can be imported
+in a python script with
+
+.. code:: Python
+
+   from gamera.toolkits.ocr.ocr_toolkit import *
+
+
+Output text generation
+''''''''''''''''''''''
+
+While the class Page_ splits the image into Textline_ objects and
+possibly classifies the characters, it does not generate an output string.
+For this purpose, you can use the function `textline_to_string`_.
+
+.. _Page: gamera.toolkits.ocr.classes.Page.html
+.. _Textline: gamera.toolkits.ocr.classes.Textline.html
+.. _`textline_to_string`: #textline-to-string
+
+
+.. docstring:: gamera.toolkits.ocr.ocr_toolkit textline_to_string
+.. docstring:: gamera.toolkits.ocr.ocr_toolkit return_char
+.. docstring:: gamera.toolkits.ocr.ocr_toolkit chars_make_words
+
+
+Segmentation
+''''''''''''
+
+These functions are used in the segmentation methods of class Page_.
+You will generally not need to call them, unless you are implementing
+a custom segmentation method.
+
+.. _Page: gamera.toolkits.ocr.classes.Page.html
+
+.. docstring:: gamera.toolkits.ocr.ocr_toolkit get_line_glyphs
+.. docstring:: gamera.toolkits.ocr.ocr_toolkit show_bboxes
+
+

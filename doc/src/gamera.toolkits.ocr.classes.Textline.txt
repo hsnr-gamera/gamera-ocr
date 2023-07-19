@@ -1,0 +1,13 @@
+class ``Textline``
+==================
+
+``Textline``
+------------
+
+In module ``gamera.toolkits.ocr.classes``
+
+.. docstring:: gamera.toolkits.ocr.classes Textline
+   :no_title:
+
+.. docstring:: gamera.toolkits.ocr.classes Textline __init__ add_glyph add_glyphs sort_glyphs
+

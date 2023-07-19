@@ -1,0 +1,271 @@
+======================
+OCR toolkit for Gamera
+======================
+
+:Editor:Andreas Miller, Rene Baston, Christoph Dalitz
+
+:Version: 2.0.0
+
+Use the 'Addons' section on the `Gamera home page`__ for access to file
+releases of this toolkit.
+
+.. __: http://gamera.informatik.hsnr.de/addons/
+
+
+Overview
+'''''''''
+
+The purpose of the *OCR Toolkit* is to help building optical character
+recognition (OCR) systems for standard text documents. Even though it
+can be used as is, it is specifically designed to make individual
+steps of the recognition system customizable and replacable.
+The toolkit is based on and requires the `Gamera framework`__ for document
+analysis and recognition. As an addon package for Gamera, it provides
+
+.. __: http://gamera.sf.net/
+
+- python library functions for building a custom OCR system
+
+- a ready-to-run python script ``ocr4gamera`` which acts as a basic OCR-system
+
+A comprehensive overview of design, usage and customization of the OCR toolkit
+can be found in the paper
+
+  C. Dalitz, R. Baston: `Optical Character Recognition with the
+  Gamera Framework.`__ In C. Dalitz (Ed.): "Document Image Analysis with 
+  the Gamera Framework." Schriftenreihe des Fachbereichs Elektrotechnik und 
+  Informatik, Hochschule Niederrhein, vol. 8, pp. 53-65, Shaker Verlag (2009)
+
+.. __: http://lionel.kr.hsnr.de/~dalitz/data/publications/sr09-ocr-gamera.pdf
+
+The recognition process
+-----------------------
+
+*Optical character recognition* (OCR) means the extraction of a
+machine readable text code from bitmap images of text documents.
+This process typically consists of the following steps:
+
+**Preprocessing:**
+  Includes binarization, skew correction, image enhancement,
+  text/graphics separation
+
+**Segmentation:**
+  Segmentation of the page in text lines (page segmentation) and
+  characters (character segmentation)
+
+**Classification:**
+  Identification of the individual characters
+
+**Postprocessing:**
+  Includes the generation of the output string and maybe detection
+  and correction of possible errors
+
+The OCR toolkit only covers the process from segmentation to postprocessing.
+For preprocessing, the standard routines shipped with Gamera must be used
+beforehand, e.g. *rotation_angle_projections* for skew correction, or
+*despeckle* for noise removal.
+
+For classification, the kNN classifier shipped with Gamera must be used.
+This means in particular, that you must train some sample pages before
+doing the classification. At present, the toolkit does not include training
+databases for common fonts.
+
+
+Provided Components
+--------------------
+The toolkit consists of two python modules, a plugin image function and
+one end user application.
+
+The modules are
+
+- *classes* which contains all class definitions
+
+- *ocr_toolkit* for global functions used across the classes
+
+The end user application is
+
+- *ocr4gamera* is a script that acts as a basic OCR-system
+
+There is also one image plugin *bbox_seg* for textline segmentation
+which is simply a wrapper around the Gamera core plugin ``bbox_segmentation``. 
+
+
+Limitations
+-----------
+
+As the segmentation of the individual characters is based on a connected
+component analysis, the toolkit cannot deal with touching characters, unless
+they have been trained as ligaturae. It is therefore in general only 
+applicable to printed documents, rather than handwritten documents.
+
+From a user's perspective, there are some points to beware in this toolkit:
+
+- It does not provide methods for text/graphics separation. Hopefully,
+  some generic methods for this purpose will be added at some point in
+  the Gamera core.
+
+- It does not provide prototypes of latin characters. This means that
+  characters must be trained on sample pages before using the toolkit.
+
+- The standard page segmentation algorithm for textline separation
+  is currently very basic.
+
+
+User's Manual
+''''''''''''''
+
+This documentation is written for those who want to use the toolkit
+for OCR, but are not interested in extending the toolkit itself.
+
+- `Using the toolkit`_: gives an explanation on how to use the toolkit.
+
+.. _`Using the toolkit`: usermanual.html
+
+
+Developer's Manual
+'''''''''''''''''''
+
+This documentation is for those who want to extend the functionality of
+the OCR toolkit, or who want to customize specific steps of the
+recognition process.
+
+- `Developer's manual`_: describes how to customize the recognition process
+- Classes_: reference for the classes involved in the segmentation process.
+  These are:
+
+  * Page_ for doing the page segmentation
+  * Textline_ for storing the segmentation result within ``Page``
+  * ClassifyCCs_ for (optionally) doing the classification during page 
+    segmentation
+
+- Functions_: the global functions defined by the toolkit
+
+- Plugins_: Reference for the plugin functions shipped with this toolkit
+
+.. _`Developer's manual`: developermanual.html
+.. _Functions: functions.html
+.. _Classes: classes.html
+.. _Page: gamera.toolkits.ocr.classes.Page.html
+.. _Textline: gamera.toolkits.ocr.classes.Textline.html
+.. _ClassifyCCs: gamera.toolkits.ocr.classes.ClassifyCCs.html
+.. _Plugins: plugins.html
+
+
+Installation
+''''''''''''
+
+We have only tested the toolkit on Linux and MacOS X, but as
+the toolkit is written entirely in Python, the following
+instructions should work for any operating system.
+
+
+Prerequisites
+-------------
+
+First you will need a working installation of Gamera 4.x. See the 
+`Gamera website`__ for details. It is strongly recommended that you use
+a recent version, preferably from SVN.
+
+.. __: http://gamera.sourceforge.net/
+
+If you want to generate the documentation, you will need two additional
+third-party Python libraries:
+
+  - docutils_ for handling reStructuredText documents.
+
+  - pygments_  for colorizing source code.
+
+.. _docutils: http://docutils.sourceforge.net/
+.. _pygments: http://pygments.org/
+
+.. note:: It is generally not necessary to generate the documentation 
+   because it is included in file releases of the toolkit.
+
+
+Building and Installing
+-----------------------
+
+Gamera toolkits can be installed, throough pip. Open a
+terminal in the folder and type::
+
+    # 1) complie
+	python setup.y build bdist_wheel
+	# 2) install
+	sudo pip install dist/gamera_ocr-*.whl
+
+Command 1) compiles the toolkit from the sources and installs it. 
+As the latter requires root privilegue, you need to use ``sudo`` on Linux and MacOS X. 
+On Windows, ``sudo`` is not necessary.
+
+Note that the script *ocr4gamera* is installed into ``/usr/bin`` on Linux.
+
+If you want to regenerate the documentation, go to the ``doc`` directory
+and run the ``gendoc.py`` script. The output will be placed in the ``doc/html/``
+directory.  The contents of this directory can be placed on a webserver
+for convenient viewing.
+
+.. note:: Before building the documentation you must install the
+   toolkit. Otherwise ``gendoc.py`` will not find the plugin documentation.
+
+
+Installing without root privileges
+----------------------------------
+
+The above installation with "pip3 install ." will install
+the toolkit system wide and thus requires root privileges. If you do
+not have root access (Linux) or are no sudoer (MacOS X), you can
+install the MusicStaves toolkit into your home directory. Note however
+that this also requires that Gamera is installed into your home directory.
+It is currently not possibole to install Gamera globally and only toolkits
+locally.
+
+Here are the steps to install both Gamera and the OCR toolkit into
+``~/python``:
+
+   # build and install the OCR toolkit locally
+   export CFLAGS=-I~/python/include/python3.x/gamera
+   pip install --install-option="--prefix=$PREFIX_PATH" package_name
+
+Moreover you should set the following environment variables in your 
+``~/.profile``:
+
+   # search path for python modules
+   export PYTHONPATH=~/python/lib/python
+
+   # search path for executables (eg. gamera_gui)
+   export PATH=~/python/bin:$PATH
+
+
+Uninstallation
+--------------
+
+The unistallation works with pip like the installation:
+
+	pip uninstall package_name
+
+As the latter requires root privilegue, you need to use ``sudo`` on Linux
+
+Python Library Files
+````````````````````
+
+All python library files of this toolkit are installed into the 
+``gamera/toolkits/ocr`` subdirectory of the Python library folder.
+
+
+Where the python library folder is depends on your system and python version.
+Here are the folders that you need to remove on MacOS X and Debian Linux
+("3.x" stands for the python version; replace it with your actual version):
+
+  - MacOS X: ``/Library/Python/3.x/gamera/toolkits/ocr``
+
+
+
+About this documentation
+''''''''''''''''''''''''
+
+The documentation was written by Rene Baston and Christoph Dalitz.
+Permission is granted to copy, distribute and/or modify this documentation
+under the terms of the `Creative Commons Attribution Share-Alike License (CC-BY-SA) v3.0`__. In addition, permission is granted to use and/or
+modify the code snippets from the documentation without restrictions.
+
+.. __: http://creativecommons.org/licenses/by-sa/3.0/

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.4.1: http://docutils.sourceforge.net/" />
+<title>OCR Toolkit: Global Functions</title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="ocr-toolkit-global-functions">
+<h1 class="title">OCR Toolkit: Global Functions</h1>
+<p><strong>Last modified</strong>: June 08, 2010</p>
+<div class="contents topic">
+<p class="topic-title first"><a id="contents" name="contents">Contents</a></p>
+<ul class="simple">
+<li><a class="reference" href="#output-text-generation" id="id5" name="id5">Output text generation</a><ul>
+<li><a class="reference" href="#id1" id="id6" name="id6"><tt class="docutils literal"><span class="pre">textline_to_string</span></tt></a></li>
+<li><a class="reference" href="#id2" id="id7" name="id7"><tt class="docutils literal"><span class="pre">return_char</span></tt></a></li>
+<li><a class="reference" href="#chars-make-words" id="id8" name="id8"><tt class="docutils literal"><span class="pre">chars_make_words</span></tt></a></li>
+</ul>
+</li>
+<li><a class="reference" href="#segmentation" id="id9" name="id9">Segmentation</a><ul>
+<li><a class="reference" href="#get-line-glyphs" id="id10" name="id10"><tt class="docutils literal"><span class="pre">get_line_glyphs</span></tt></a></li>
+<li><a class="reference" href="#show-bboxes" id="id11" name="id11"><tt class="docutils literal"><span class="pre">show_bboxes</span></tt></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>The toolkit defines a number of free function which are not image
+methods. These are defined in <em>ocr_toolkit.py</em> and can be imported
+in a python script with</p>
+<div class="highlight"><pre><span class="k">from</span> <span class="nn">gamera.toolkits.ocr.ocr_toolkit</span> <span class="k">import</span> <span class="o">*</span>
+</pre></div>
+<div class="section">
+<h1><a class="toc-backref" href="#id5" id="output-text-generation" name="output-text-generation">Output text generation</a></h1>
+<p>While the class <a class="reference" href="gamera.toolkits.ocr.classes.Page.html">Page</a> splits the image into <a class="reference" href="gamera.toolkits.ocr.classes.Textline.html">Textline</a> objects and
+possibly classifies the characters, it does not generate an output string.
+For this purpose, you can use the function <a class="reference" href="#textline-to-string">textline_to_string</a>.</p>
+<div class="section">
+<h2><a class="toc-backref" href="#id6" id="id1" name="id1"><tt class="docutils literal"><span class="pre">textline_to_string</span></tt></a></h2>
+<p>Returns a unicode string of the text in the given <tt class="docutils literal"><span class="pre">Textline</span></tt>.</p>
+<p>Signature:</p>
+<blockquote>
+<tt class="docutils literal"><span class="pre">textline_to_string</span> <span class="pre">(textline,</span> <span class="pre">heuristic_rules=&quot;roman&quot;,</span> <span class="pre">extra_chars_dict={})</span></tt></blockquote>
+<p>with</p>
+<blockquote>
+<dl class="docutils">
+<dt><em>textline</em>:</dt>
+<dd>A <tt class="docutils literal"><span class="pre">Textline</span></tt> object containing the glyphs. The glyphs must already
+be classified.</dd>
+<dt><em>heuristic_rules</em>:</dt>
+<dd><p class="first">Depending on the alphabeth, some characters can very similar and
+need further heuristic rules for disambiguation, like apostroph and
+comma, which have the same shape and only differ in their position
+relative to the baseline.</p>
+<p class="last">When set to &quot;roman&quot;, several rules specific for latin alphabeths
+are applied.</p>
+</dd>
+<dt><em>extra_chars_dict</em></dt>
+<dd>A dictionary of additional translations of classnames to character codes.
+This is necessary when you use class names that are not unicode names.
+Will be passed to <a class="reference" href="#return-char">return_char</a>.</dd>
+</dl>
+</blockquote>
+<p>As this function uses <a class="reference" href="#return-char">return_char</a>, the class names of the glyphs in
+<em>textline</em> must corerspond to unicode character names, as described in
+the documentation of <a class="reference" href="#return-char">return_char</a>.</p>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id7" id="id2" name="id2"><tt class="docutils literal"><span class="pre">return_char</span></tt></a></h2>
+<p>Converts a unicode character name to a unicode symbol.</p>
+<p>Signature:</p>
+<blockquote>
+<tt class="docutils literal"><span class="pre">return_char</span> <span class="pre">(classname,</span> <span class="pre">extra_chars_dict={})</span></tt></blockquote>
+<p>with</p>
+<blockquote>
+<dl class="docutils">
+<dt><em>classname</em>:</dt>
+<dd>A class name derived from a unicode character name.
+Example: <tt class="docutils literal"><span class="pre">latin.small.letter.a</span></tt> returns the character <tt class="docutils literal"><span class="pre">a</span></tt>.</dd>
+<dt><em>extra_chars_dict</em></dt>
+<dd>A dictionary of additional translations of classnames to character codes.
+This is necessary when you use class names that are not unicode names.
+The character 'code' does not need to be an actual code, but can be
+any string. This can be useful, e.g. for ligatures:</dd>
+</dl>
+<div class="highlight"><pre><span class="n">return_char</span><span class="p">(</span><span class="n">glyph</span><span class="o">.</span><span class="n">get_main_id</span><span class="p">(),</span> <span class="p">{</span><span class="s">&#39;latin.small.ligature.st&#39;</span><span class="p">:</span><span class="s">&#39;st&#39;</span><span class="p">})</span>
+</pre></div>
+</blockquote>
+<p><em>classname</em> must correspond to the <a class="reference" href="http://www.unicode.org/charts/">standard unicode character names</a>,
+as in the examples of the following table:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="16%" />
+<col width="42%" />
+<col width="42%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Character</th>
+<th class="head">Unicode Name</th>
+<th class="head">Class Name</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="docutils literal"><span class="pre">!</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">EXCLAMATION</span> <span class="pre">MARK</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">exclamation.mark</span></tt></td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">2</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">DIGIT</span> <span class="pre">TWO</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">digit.two</span></tt></td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">A</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">LATIN</span> <span class="pre">CAPITAL</span> <span class="pre">LETTER</span> <span class="pre">A</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">latin.capital.letter.a</span></tt></td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">a</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">LATIN</span> <span class="pre">SMALL</span> <span class="pre">LETTER</span> <span class="pre">A</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">latin.small.letter.a</span></tt></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id8" id="chars-make-words" name="chars-make-words"><tt class="docutils literal"><span class="pre">chars_make_words</span></tt></a></h2>
+<p>Groups the given glyphs to words based upon the horizontal distance
+between adjacent glyphs.</p>
+<dl class="docutils">
+<dt>Signature:</dt>
+<dd><tt class="docutils literal"><span class="pre">chars_make_words</span> <span class="pre">(glyphs,</span> <span class="pre">threshold=None)</span></tt></dd>
+</dl>
+<p>with</p>
+<blockquote>
+<dl class="docutils">
+<dt><em>glyphs</em>:</dt>
+<dd>A list of <tt class="docutils literal"><span class="pre">Cc</span></tt> data types, each of which representing a character.
+All glyphs must stem from the same single line of text.</dd>
+<dt><em>threshold</em>:</dt>
+<dd>Horizontal white space greater than <em>threshold</em> will be considered
+a word separating gap. When <tt class="docutils literal"><span class="pre">None</span></tt>, the threshold value is
+calculated automatically as 2.5 times teh median white space
+between adjacent glyphs.</dd>
+</dl>
+</blockquote>
+<p>The result is a nested list of glyphs with each sublist representing
+a word. This is the same data structure as used in <a class="reference" href="gamera.toolkits.ocr.classes.Textline.html">Textline.words</a></p>
+</div>
+</div>
+<div class="section">
+<h1><a class="toc-backref" href="#id9" id="segmentation" name="segmentation">Segmentation</a></h1>
+<p>These functions are used in the segmentation methods of class <a class="reference" href="gamera.toolkits.ocr.classes.Page.html">Page</a>.
+You will generally not need to call them, unless you are implementing
+a custom segmentation method.</p>
+<div class="section">
+<h2><a class="toc-backref" href="#id10" id="get-line-glyphs" name="get-line-glyphs"><tt class="docutils literal"><span class="pre">get_line_glyphs</span></tt></a></h2>
+<p>Splits image regions representing text lines into characters.</p>
+<p>Signature:</p>
+<blockquote>
+<tt class="docutils literal"><span class="pre">get_line_glyphs</span> <span class="pre">(image,</span> <span class="pre">segments)</span></tt></blockquote>
+<p>with</p>
+<blockquote>
+<dl class="docutils">
+<dt><em>image</em>:</dt>
+<dd>The document image that is to be further segmentated. It must contin the
+same underlying image data as the second argument <em>segments</em></dd>
+<dt><em>segments</em>:</dt>
+<dd>A list <tt class="docutils literal"><span class="pre">Cc</span></tt> data types, each of which represents a text line region.
+The image views must correspond to <em>image</em>, i.e. each pixels has a value
+that is the unique label of the text line it belongs to. This is the
+interface used by the plugins in the &quot;PageSegmentation&quot; section of the
+Gamera core.</dd>
+</dl>
+</blockquote>
+<p>The result is returned as a list of <a class="reference" href="gamera.toolkits.ocr.classes.Textline.html">Textline</a> objects.</p>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id11" id="show-bboxes" name="show-bboxes"><tt class="docutils literal"><span class="pre">show_bboxes</span></tt></a></h2>
+<p>Returns an RGB image with bounding boxes of the given glyphs as
+hollow rects. Useful for visualization and debugging of a segmentation.</p>
+<p>Signature:</p>
+<blockquote>
+<tt class="docutils literal"><span class="pre">show_bboxes</span> <span class="pre">(image,</span> <span class="pre">glyphs)</span></tt></blockquote>
+<p>with:</p>
+<blockquote>
+<dl class="docutils">
+<dt><em>image</em>:</dt>
+<dd>An image of the textdokument which has to be segmentated.</dd>
+<dt><em>glyphs</em>:</dt>
+<dd>List of rects which will be drawn on <tt class="docutils literal"><span class="pre">image</span></tt> as hollow rects.
+As all image types are derived from <tt class="docutils literal"><span class="pre">Rect</span></tt>, any image list can
+be passed.</dd>
+</dl>
+</blockquote>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,13 @@
+class ``ClassifyCCs``
+=====================
+
+``ClassifyCCs``
+---------------
+
+In module ``gamera.toolkits.ocr.classes``
+
+.. docstring:: gamera.toolkits.ocr.classes ClassifyCCs
+   :no_title:
+
+.. docstring:: gamera.toolkits.ocr.classes ClassifyCCs __init__ __call__
+

@@ -1,0 +1,13 @@
+class ``Page``
+==============
+
+``Page``
+--------
+
+In module ``gamera.toolkits.ocr.classes``
+
+.. docstring:: gamera.toolkits.ocr.classes Page
+   :no_title:
+
+.. docstring:: gamera.toolkits.ocr.classes Page __init__ segment page_to_lines order_lines lines_to_chars chars_to_words show_lines show_glyphs show_words
+

@@ -1,0 +1,112 @@
+==============================
+OCR Toolkit Developer's Manual
+==============================
+
+This documentation is for those who want to extend the functionality of the
+OCR toolkit, or who want to customize specific steps of the recognition 
+process. For a comprehensive overview over the architecture of this toolkit,
+see section 3 of
+
+  C. Dalitz, R. Baston: `Optical Character Recognition with the
+  Gamera Framework.`__ In C. Dalitz (Ed.): "Document Image Analysis with 
+  the Gamera Framework." Schriftenreihe des Fachbereichs Elektrotechnik und 
+  Informatik, Hochschule Niederrhein, vol. 8, pp. 53-65, Shaker Verlag (2009)
+
+.. __: http://lionel.kr.hsnr.de/~dalitz/data/publications/sr09-ocr-gamera.pdf
+
+Overview
+'''''''''
+
+The core functionality of this toolkit is implemented in the Page_ class.
+This class provides a method *segment*, which segments the page into lines,
+and the lines into characters and words. The segmentation result is stored
+in the property *textlines*, which is a list of objects from type Textline_.
+
+.. _Page: gamera.toolkits.ocr.classes.Page.html
+.. _Textline: gamera.toolkits.ocr.classes.Textline.html
+
+To customize the page segmentation process, you can derive a custom class
+from ``Page``, and overwrite some methods. While it is theoretically possible
+to directly overwrite the *segment* method, it is in most cases more
+desirable to only overwrite one of the methods called in *segment*, so that 
+only a specific part of the segmentation process is replaced. See the
+`documentation of Page.segment`__ for information which other methods
+are called in this method.
+
+.. __: gamera.toolkits.ocr.classes.Page.html#segment
+
+In the subsequent sections, we describe two typical use cases:
+
+- the replacement of the standard page segmentation algorithm with 
+  something else
+- the replacement of the rule based character segmentation with Gamera's
+  classification based grouping algorithm.
+
+
+Replacing the page segmentation method
+''''''''''''''''''''''''''''''''''''''
+
+Let us assume you want to use the Gamera core plugin *projection_cutting*
+for segmenting the page into text lines. To do so, simply derive a custom
+class *MyPage* from *Page* and overwrite the *page_to_lines* method:
+
+.. code:: Python
+
+   class MyPage(Page):
+       def page_to_lines(self):
+           self.ccs_lines = self.img.projection_cutting()
+
+This example is obviously very basic; in practice you might want to experiment
+with the input arguments of *projection_cutting*. You can the use *MyPge* just
+like *Page*, and the following code does the same segmentation as 
+*Page.segment*, but with only *page_to_lines* replaced:
+
+.. code:: Python
+
+   result = MyPage(image)
+   result.segment()
+
+
+Let Gamera's training based grouping attach diacritics
+''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+Now let us assume that you want to let Gamera's classification based 
+grouping algorithm join connected components to characters, rather than the
+rule based method built into ``Page.lines_to_chars``. To do so, derive
+a custom class *MyPage* from *Page*, that segments the line into characters
+only by a connected component analysis, without any joining of CCs to characters
+(this will be done at a later point):
+
+.. code:: Python
+
+   # segment lines into chars only by CC analysis
+   class MyPage(Page):
+       def lines_to_chars(self):
+           dummy, subbccs = self.img.sub_cc_analysis(self.ccs_lines)
+       self.textlines = []
+       for i,segment in enumerate(self.ccs_lines):
+           self.textlines.append(Textline(segment, subccs[i]))
+
+Then you must make sure that a classification with grouping is done during
+``Page.segment``. This is done by passing a callable class derived from
+ClassifyCCs_ to the contructor of *MyPage*. As the default definition of
+*ClassifyCCs* already does what we need, we simply need to create an
+instance thereform:
+
+.. _ClassifyCCs: gamera.toolkits.ocr.classes.ClassifyCCs.html
+
+.. code:: Python
+
+   # create an instance of ClassifyCCs ...
+   cknn = knn.kNNInteractive([], \
+              ["aspect_ratio", "moments", "volume64regions"], 0)
+   cknn.from_xml_filename("trainingdata.xml")  
+   classify = ClassifyCCs(cknn)
+   # ... and set its property parts_to_group such that the
+   #     grouping algorithm will be used during classification
+   classify.parts_to_group = 4
+
+   # pass the ClassifyCCs instance to the constructor of MyPage
+   page = MyPage(image, classify_ccs=classify)
+   page.segment()  # will call classify
+

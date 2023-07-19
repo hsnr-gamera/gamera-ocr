@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.4.1: http://docutils.sourceforge.net/" />
+<title>ocr_toolkit_py</title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="ocr-toolkit-py">
+<h1 class="title">ocr_toolkit_py</h1>
+<p><strong>Last modified</strong>: September 15, 2009</p>
+<div class="contents topic">
+<p class="topic-title first"><a id="contents" name="contents">Contents</a></p>
+<ul class="simple">
+<li><a class="reference" href="#functions" id="id1" name="id1">Functions</a><ul>
+<li><a class="reference" href="#return-char" id="id2" name="id2">return_char</a></li>
+<li><a class="reference" href="#chars-make-words" id="id3" name="id3">chars_make_words</a></li>
+<li><a class="reference" href="#textline-to-string" id="id4" name="id4">textline_to_string</a></li>
+<li><a class="reference" href="#check-upper-neighbors" id="id5" name="id5">check_upper_neighbors</a></li>
+<li><a class="reference" href="#check-glyph-accent" id="id6" name="id6">check_glyph_accent</a></li>
+<li><a class="reference" href="#get-line-glyphs" id="id7" name="id7">get_line_glyphs</a></li>
+<li><a class="reference" href="#show-bboxes" id="id8" name="id8">show_bboxes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section">
+<h1><a class="toc-backref" href="#id1" id="functions" name="functions">Functions</a></h1>
+<div class="section">
+<h2><a class="toc-backref" href="#id2" id="return-char" name="return-char">return_char</a></h2>
+<p>Returns a result character for building the string.</p>
+<dl class="docutils">
+<dt>Signature:</dt>
+<dd><tt class="docutils literal"><span class="pre">return_char(unicode_str)</span></tt></dd>
+</dl>
+<p>with</p>
+<dl class="docutils">
+<dt><strong>unicode_str</strong>:</dt>
+<dd>This expeted string has to be in unicode format, e.g. <tt class="docutils literal"><span class="pre">latin.small.letter.a</span></tt> will return the character <tt class="docutils literal"><span class="pre">a</span></tt> The returned character should be used for creating the result string.</dd>
+</dl>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id3" id="chars-make-words" name="chars-make-words">chars_make_words</a></h2>
+<p>Splits the amount of grouped characters which has been detected in a textline to single words.</p>
+<dl class="docutils">
+<dt>Signature:</dt>
+<dd><tt class="docutils literal"><span class="pre">chars_make_words(lines_glyphs,threshold=None)</span></tt></dd>
+</dl>
+<p>with</p>
+<dl class="docutils">
+<dt><em>lines_glyphs</em>:</dt>
+<dd><tt class="docutils literal"><span class="pre">lines_glyphs</span></tt> has to be the list of connected-components which represents the amount of characters for a textline.</dd>
+<dt><em>threshold</em>:</dt>
+<dd>For splitting the amount of characters to single words is a <tt class="docutils literal"><span class="pre">threshold</span></tt> needed. If two characters have more or equal empty space between each other there is a white space detected. The default value for this parameter is <tt class="docutils literal"><span class="pre">None</span></tt> which will make the function calculate a threshold value automatic</dd>
+</dl>
+<p>The <tt class="docutils literal"><span class="pre">Textline</span></tt> Objects keep a word list as an attribute which expects a list like this functions return value.</p>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id4" id="textline-to-string" name="textline-to-string">textline_to_string</a></h2>
+<p>Gives a full text string as result.</p>
+<dl class="docutils">
+<dt>Signature:</dt>
+<dd><tt class="docutils literal"><span class="pre">textline_to_string(line,</span> <span class="pre">heuristic_rules=&quot;roman&quot;)</span></tt></dd>
+</dl>
+<p>with</p>
+<dl class="docutils">
+<dt><em>line</em>:</dt>
+<dd>The <tt class="docutils literal"><span class="pre">Textline</span></tt> Object which keeps the characters.</dd>
+<dt><em>heuristic_rules</em>:</dt>
+<dd>Some classified characters need some further heuristic classification rules. Take the apostroph as an example which might get classified as a comma but is placed at the top of a textline. Therefore the apostroph can be classified &quot;manual&quot; as a comma. On default this function includes some rules for often noticed classification errors for _roman_ alphabet.</dd>
+</dl>
+<p>The result of this function can be used as a final result as this is the full text string.</p>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id5" id="check-upper-neighbors" name="check-upper-neighbors">check_upper_neighbors</a></h2>
+<p>Check two glyphs for beeing grouped to one single character. This function is for unit connected-components like quotation marks.</p>
+<dl class="docutils">
+<dt>Signature:</dt>
+<dd><tt class="docutils literal"><span class="pre">check_upper_neighbors(item,glyph,line)</span></tt></dd>
+</dl>
+<p>with</p>
+<dl class="docutils">
+<dt><em>item</em>:</dt>
+<dd>Some connected-component.</dd>
+<dt><em>glyph</em>:</dt>
+<dd>Some connected-component.</dd>
+<dt><em>line</em>:</dt>
+<dd>The <tt class="docutils literal"><span class="pre">Textline</span></tt> Object which includes <tt class="docutils literal"><span class="pre">item</span></tt> and <tt class="docutils literal"><span class="pre">glyph</span></tt></dd>
+</dl>
+<p>There is returned an array with two elements. The first element keeps a list of characters (images that has been united to a single image) and the second image is a list of characters which has to be removed as these have been united to a single character.</p>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id6" id="check-glyph-accent" name="check-glyph-accent">check_glyph_accent</a></h2>
+<p>Check two glyphs for beeing grouped to one single character. This function is for unit connected-components like i, j or colon.</p>
+<dl class="docutils">
+<dt>Signature:</dt>
+<dd><tt class="docutils literal"><span class="pre">check_glyph_accent(item,glyph)</span></tt></dd>
+</dl>
+<p>with</p>
+<dl class="docutils">
+<dt><em>item</em>:</dt>
+<dd>Some connected-component.</dd>
+<dt><em>glyph</em>:</dt>
+<dd>Some connected-component.</dd>
+</dl>
+<p>There is returned an array with two elements. The first element keeps a list of characters (images that has been united to a single image) and the second image is a list of characters which has to be removed as these have been united to a single character.</p>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id7" id="get-line-glyphs" name="get-line-glyphs">get_line_glyphs</a></h2>
+<p>Segmentates the glyphs which are included in every single textline with simple rules.</p>
+<dl class="docutils">
+<dt>Signature:</dt>
+<dd><tt class="docutils literal"><span class="pre">get_line_glyphs(image,textlines)</span></tt></dd>
+</dl>
+<p>with</p>
+<dl class="docutils">
+<dt><em>image</em>:</dt>
+<dd>The textdocument image which is beeing segmentated.</dd>
+<dt><em>textlines</em>:</dt>
+<dd>A list of connected-components which keeps every textline of the document.</dd>
+</dl>
+<p>A <tt class="docutils literal"><span class="pre">Page</span></tt> Object has a list named <tt class="docutils literal"><span class="pre">textlines</span></tt> which should include <tt class="docutils literal"><span class="pre">Textline</span></tt> Objects. This list is filled within this function as it is called in a <tt class="docutils literal"><span class="pre">Page</span></tt> method.</p>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id8" id="show-bboxes" name="show-bboxes">show_bboxes</a></h2>
+<p>Draws hollow rects in an copy of image based on the rects in the <tt class="docutils literal"><span class="pre">glyphs</span></tt> list. If the <tt class="docutils literal"><span class="pre">save</span></tt> parameter is set to <tt class="docutils literal"><span class="pre">1</span></tt> a file with the name of <tt class="docutils literal"><span class="pre">filename</span></tt> will be created.</p>
+<dl class="docutils">
+<dt>Signature:</dt>
+<dd><tt class="docutils literal"><span class="pre">show_bboxes(image,glyphs,filename=\&quot;segmenated_glyphs.PNG\&quot;,save=1)</span></tt></dd>
+</dl>
+<p>with:</p>
+<dl class="docutils">
+<dt><em>image</em>:</dt>
+<dd>An image of the textdokument which has to be segmentated.</dd>
+<dt><em>glyphs</em>:</dt>
+<dd>A list of rects which will be drawn on <tt class="docutils literal"><span class="pre">image</span></tt> as hallow rects.</dd>
+<dt><em>filename</em>:</dt>
+<dd>A filename for the image file that might be created.</dd>
+<dt><em>save</em>:</dt>
+<dd>On default <tt class="docutils literal"><span class="pre">save</span></tt> is set to <tt class="docutils literal"><span class="pre">1</span></tt> which will cause the function to create a new image file named <tt class="docutils literal"><span class="pre">filename</span></tt>. If <tt class="docutils literal"><span class="pre">save</span></tt> is set to <tt class="docutils literal"><span class="pre">0</span></tt> the function will try to display the image on-the-fly in a box.</dd>
+</dl>
+<p>This function is usefull for debugging or for getting information about the segmentation process. The <tt class="docutils literal"><span class="pre">Page</span></tt> object useses this function in three methods for displaying the segmentation of textlines, all single characters and all detected words.</p>
+</div>
+</div>
+</div>
+</body>
+</html>

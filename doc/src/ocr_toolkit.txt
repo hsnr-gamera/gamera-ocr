@@ -1,0 +1,136 @@
+==================
+ocr_toolkit_py
+==================
+
+Functions
+''''''''''
+
+return_char
+------------
+Returns a result character for building the string. 
+
+Signature:
+  ``return_char(unicode_str)``
+
+with
+
+**unicode_str**:
+  This expeted string has to be in unicode format, e.g. ``latin.small.letter.a`` will return the character ``a`` The returned character should be used for creating the result string.
+
+chars_make_words
+-----------------
+Splits the amount of grouped characters which has been detected in a textline to single words.
+
+Signature:
+  ``chars_make_words(lines_glyphs,threshold=None)``
+
+with
+
+*lines_glyphs*:
+  ``lines_glyphs`` has to be the list of connected-components which represents the amount of characters for a textline.
+
+*threshold*:
+  For splitting the amount of characters to single words is a ``threshold`` needed. If two characters have more or equal empty space between each other there is a white space detected. The default value for this parameter is ``None`` which will make the function calculate a threshold value automatic
+  
+The ``Textline`` Objects keep a word list as an attribute which expects a list like this functions return value.
+
+
+textline_to_string
+------------------
+Gives a full text string as result. 
+
+Signature:
+  ``textline_to_string(line, heuristic_rules="roman")``
+
+with
+
+*line*:
+  The ``Textline`` Object which keeps the characters. 
+
+*heuristic_rules*:
+  Some classified characters need some further heuristic classification rules. Take the apostroph as an example which might get classified as a comma but is placed at the top of a textline. Therefore the apostroph can be classified \"manual\" as a comma. On default this function includes some rules for often noticed classification errors for _roman_ alphabet.
+
+
+The result of this function can be used as a final result as this is the full text string.
+
+
+check_upper_neighbors
+----------------------
+Check two glyphs for beeing grouped to one single character. This function is for unit connected-components like quotation marks.
+
+Signature:
+  ``check_upper_neighbors(item,glyph,line)``
+
+with
+
+*item*:
+  Some connected-component.
+
+*glyph*:
+  Some connected-component.
+
+*line*:
+  The ``Textline`` Object which includes ``item`` and ``glyph``
+
+There is returned an array with two elements. The first element keeps a list of characters (images that has been united to a single image) and the second image is a list of characters which has to be removed as these have been united to a single character.
+
+
+check_glyph_accent
+-------------------
+Check two glyphs for beeing grouped to one single character. This function is for unit connected-components like i, j or colon.
+
+Signature:
+  ``check_glyph_accent(item,glyph)``
+
+with
+
+*item*:
+  Some connected-component.
+
+*glyph*:
+  Some connected-component.
+
+There is returned an array with two elements. The first element keeps a list of characters (images that has been united to a single image) and the second image is a list of characters which has to be removed as these have been united to a single character.
+
+
+get_line_glyphs
+----------------
+Segmentates the glyphs which are included in every single textline with simple rules.
+
+Signature:
+  ``get_line_glyphs(image,textlines)``
+
+with
+
+*image*:
+  The textdocument image which is beeing segmentated.
+
+*textlines*:
+  A list of connected-components which keeps every textline of the document.
+
+A ``Page`` Object has a list named ``textlines`` which should include ``Textline`` Objects. This list is filled within this function as it is called in a ``Page`` method.
+
+
+show_bboxes
+------------
+Draws hollow rects in an copy of image based on the rects in the ``glyphs`` list. If the ``save`` parameter is set to ``1`` a file with the name of ``filename`` will be created.
+
+Signature:
+  ``show_bboxes(image,glyphs,filename=\"segmenated_glyphs.PNG\",save=1)``
+
+with:
+
+*image*:
+  An image of the textdokument which has to be segmentated.
+
+*glyphs*:
+  A list of rects which will be drawn on ``image`` as hallow rects.
+
+*filename*:
+  A filename for the image file that might be created.
+
+*save*:
+  On default ``save`` is set to ``1`` which will cause the function to create a new image file named ``filename``. If ``save`` is set to ``0`` the function will try to display the image on-the-fly in a box.
+
+This function is usefull for debugging or for getting information about the segmentation process. The ``Page`` object useses this function in three methods for displaying the segmentation of textlines, all single characters and all detected words.
+
