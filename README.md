@@ -43,7 +43,8 @@ For a small exmaple including training data and test images, see
 Installation
 ------------
 
-See the section "Installation" in `doc/html/index.html` or
+Installation is done with `pip3`, which will install a python module
+*gamera-ocr*. See the section "Installation" in `doc/html/index.html` or
 `doc/src/index.txt`.
 
 
