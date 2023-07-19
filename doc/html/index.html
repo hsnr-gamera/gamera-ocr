@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.20.1: https://docutils.sourceforge.io/" />
+<meta name="generator" content="Docutils 0.12: http://docutils.sourceforge.net/" />
 <title>OCR toolkit for Gamera</title>
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
@@ -11,29 +11,29 @@
 <div class="document" id="ocr-toolkit-for-gamera">
 <h1 class="title">OCR toolkit for Gamera</h1>
 
-<p><strong>Last modified</strong>: July 11, 2023</p>
+<p><strong>Last modified</strong>: July 19, 2023</p>
 <div class="contents topic" id="contents">
-<p class="topic-title">Contents</p>
+<p class="topic-title first">Contents</p>
 <ul class="simple">
-<li><a class="reference internal" href="#overview" id="toc-entry-1">Overview</a><ul>
-<li><a class="reference internal" href="#the-recognition-process" id="toc-entry-2">The recognition process</a></li>
-<li><a class="reference internal" href="#provided-components" id="toc-entry-3">Provided Components</a></li>
-<li><a class="reference internal" href="#limitations" id="toc-entry-4">Limitations</a></li>
+<li><a class="reference internal" href="#overview" id="id7">Overview</a><ul>
+<li><a class="reference internal" href="#the-recognition-process" id="id8">The recognition process</a></li>
+<li><a class="reference internal" href="#provided-components" id="id9">Provided Components</a></li>
+<li><a class="reference internal" href="#limitations" id="id10">Limitations</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#user-s-manual" id="toc-entry-5">User's Manual</a></li>
-<li><a class="reference internal" href="#developer-s-manual" id="toc-entry-6">Developer's Manual</a></li>
-<li><a class="reference internal" href="#installation" id="toc-entry-7">Installation</a><ul>
-<li><a class="reference internal" href="#prerequisites" id="toc-entry-8">Prerequisites</a></li>
-<li><a class="reference internal" href="#building-and-installing" id="toc-entry-9">Building and Installing</a></li>
-<li><a class="reference internal" href="#installing-without-root-privileges" id="toc-entry-10">Installing without root privileges</a></li>
-<li><a class="reference internal" href="#uninstallation" id="toc-entry-11">Uninstallation</a><ul>
-<li><a class="reference internal" href="#python-library-files" id="toc-entry-12">Python Library Files</a></li>
+<li><a class="reference internal" href="#user-s-manual" id="id11">User's Manual</a></li>
+<li><a class="reference internal" href="#developer-s-manual" id="id12">Developer's Manual</a></li>
+<li><a class="reference internal" href="#installation" id="id13">Installation</a><ul>
+<li><a class="reference internal" href="#prerequisites" id="id14">Prerequisites</a></li>
+<li><a class="reference internal" href="#building-and-installing" id="id15">Building and Installing</a></li>
+<li><a class="reference internal" href="#installing-without-root-privileges" id="id16">Installing without root privileges</a></li>
+<li><a class="reference internal" href="#uninstallation" id="id17">Uninstallation</a><ul>
+<li><a class="reference internal" href="#python-library-files" id="id18">Python Library Files</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#about-this-documentation" id="toc-entry-13">About this documentation</a></li>
+<li><a class="reference internal" href="#about-this-documentation" id="id19">About this documentation</a></li>
 </ul>
 </div>
 <p>:Editor:Andreas Miller, Rene Baston, Christoph Dalitz</p>
@@ -48,7 +48,7 @@
 <p>Use the 'Addons' section on the <a class="reference external" href="http://gamera.informatik.hsnr.de/addons/">Gamera home page</a> for access to file
 releases of this toolkit.</p>
 <div class="section" id="overview">
-<h1><a class="toc-backref" href="#toc-entry-1">Overview</a></h1>
+<h1><a class="toc-backref" href="#id7">Overview</a></h1>
 <p>The purpose of the <em>OCR Toolkit</em> is to help building optical character
 recognition (OCR) systems for standard text documents. Even though it
 can be used as is, it is specifically designed to make individual
@@ -67,7 +67,7 @@ Gamera Framework.</a> In C. Dalitz (Ed.): &quot;Document Image Analysis with
 the Gamera Framework.&quot; Schriftenreihe des Fachbereichs Elektrotechnik und
 Informatik, Hochschule Niederrhein, vol. 8, pp. 53-65, Shaker Verlag (2009)</blockquote>
 <div class="section" id="the-recognition-process">
-<h2><a class="toc-backref" href="#toc-entry-2">The recognition process</a></h2>
+<h2><a class="toc-backref" href="#id8">The recognition process</a></h2>
 <p><em>Optical character recognition</em> (OCR) means the extraction of a
 machine readable text code from bitmap images of text documents.
 This process typically consists of the following steps:</p>
@@ -94,7 +94,7 @@ doing the classification. At present, the toolkit does not include training
 databases for common fonts.</p>
 </div>
 <div class="section" id="provided-components">
-<h2><a class="toc-backref" href="#toc-entry-3">Provided Components</a></h2>
+<h2><a class="toc-backref" href="#id9">Provided Components</a></h2>
 <p>The toolkit consists of two python modules, a plugin image function and
 one end user application.</p>
 <p>The modules are</p>
@@ -110,7 +110,7 @@ one end user application.</p>
 which is simply a wrapper around the Gamera core plugin <tt class="docutils literal">bbox_segmentation</tt>.</p>
 </div>
 <div class="section" id="limitations">
-<h2><a class="toc-backref" href="#toc-entry-4">Limitations</a></h2>
+<h2><a class="toc-backref" href="#id10">Limitations</a></h2>
 <p>As the segmentation of the individual characters is based on a connected
 component analysis, the toolkit cannot deal with touching characters, unless
 they have been trained as ligaturae. It is therefore in general only
@@ -128,7 +128,7 @@ is currently very basic.</li>
 </div>
 </div>
 <div class="section" id="user-s-manual">
-<h1><a class="toc-backref" href="#toc-entry-5">User's Manual</a></h1>
+<h1><a class="toc-backref" href="#id11">User's Manual</a></h1>
 <p>This documentation is written for those who want to use the toolkit
 for OCR, but are not interested in extending the toolkit itself.</p>
 <ul class="simple">
@@ -136,7 +136,7 @@ for OCR, but are not interested in extending the toolkit itself.</p>
 </ul>
 </div>
 <div class="section" id="developer-s-manual">
-<h1><a class="toc-backref" href="#toc-entry-6">Developer's Manual</a></h1>
+<h1><a class="toc-backref" href="#id12">Developer's Manual</a></h1>
 <p>This documentation is for those who want to extend the functionality of
 the OCR toolkit, or who want to customize specific steps of the
 recognition process.</p>
@@ -155,12 +155,12 @@ segmentation</li>
 </ul>
 </div>
 <div class="section" id="installation">
-<h1><a class="toc-backref" href="#toc-entry-7">Installation</a></h1>
+<h1><a class="toc-backref" href="#id13">Installation</a></h1>
 <p>We have only tested the toolkit on Linux and MacOS X, but as
 the toolkit is written entirely in Python, the following
 instructions should work for any operating system.</p>
 <div class="section" id="prerequisites">
-<h2><a class="toc-backref" href="#toc-entry-8">Prerequisites</a></h2>
+<h2><a class="toc-backref" href="#id14">Prerequisites</a></h2>
 <p>First you will need a working installation of Gamera 4.x. See the
 <a class="reference external" href="http://gamera.sourceforge.net/">Gamera website</a> for details. It is strongly recommended that you use
 a recent version, preferably from SVN.</p>
@@ -172,34 +172,42 @@ third-party Python libraries:</p>
 <li><a class="reference external" href="http://pygments.org/">pygments</a>  for colorizing source code.</li>
 </ul>
 </blockquote>
-<div class="admonition note">
+<div class="note">
 <p class="first admonition-title">Note</p>
 <p class="last">It is generally not necessary to generate the documentation
 because it is included in file releases of the toolkit.</p>
 </div>
 </div>
 <div class="section" id="building-and-installing">
-<h2><a class="toc-backref" href="#toc-entry-9">Building and Installing</a></h2>
+<h2><a class="toc-backref" href="#id15">Building and Installing</a></h2>
 <p>Gamera toolkits can be installed, throough pip. Open a
 terminal in the folder and type:</p>
-<blockquote>
-# 1) pip install .</blockquote>
+<pre class="literal-block">
+# 1) complie
+    python3 setup.y build bdist_wheel
+    # 2) install
+    sudo pip3 install dist/gamera_ocr-*.whl
+</pre>
 <p>Command 1) compiles the toolkit from the sources and installs it.
-As the latter requires root privilegue, you need to use <tt class="docutils literal">sudo</tt> on Linux and MacOS X.
-On Windows, <tt class="docutils literal">sudo</tt> is not necessary.</p>
-<p>Note that the script <em>ocr4gamera</em> is installed into <tt class="docutils literal">/usr/bin</tt> on Linux.</p>
+As the latter requires root privilegue, you need to use <tt class="docutils literal">sudo</tt>
+on Linux and MacOS X. On Windows, <tt class="docutils literal">sudo</tt> is not necessary.</p>
+<p>Note that the script <em>ocr4gamera</em> is installed into <tt class="docutils literal"><span class="pre">/usr/local//bin</span></tt>
+on Linux.</p>
+<p>To generate a source code package in the <cite>dist</cite> subdirectory, use the command</p>
+<blockquote>
+python3 setupy.py sdist</blockquote>
 <p>If you want to regenerate the documentation, go to the <tt class="docutils literal">doc</tt> directory
 and run the <tt class="docutils literal">gendoc.py</tt> script. The output will be placed in the <tt class="docutils literal">doc/html/</tt>
 directory.  The contents of this directory can be placed on a webserver
 for convenient viewing.</p>
-<div class="admonition note">
+<div class="note">
 <p class="first admonition-title">Note</p>
 <p class="last">Before building the documentation you must install the
 toolkit. Otherwise <tt class="docutils literal">gendoc.py</tt> will not find the plugin documentation.</p>
 </div>
 </div>
 <div class="section" id="installing-without-root-privileges">
-<h2><a class="toc-backref" href="#toc-entry-10">Installing without root privileges</a></h2>
+<h2><a class="toc-backref" href="#id16">Installing without root privileges</a></h2>
 <p>The above installation with &quot;pip3 install .&quot; will install
 the toolkit system wide and thus requires root privileges. If you do
 not have root access (Linux) or are no sudoer (MacOS X), you can
@@ -223,13 +231,13 @@ export PATH=~/python/bin:$PATH</p>
 </blockquote>
 </div>
 <div class="section" id="uninstallation">
-<h2><a class="toc-backref" href="#toc-entry-11">Uninstallation</a></h2>
+<h2><a class="toc-backref" href="#id17">Uninstallation</a></h2>
 <p>The unistallation works with pip like the installation:</p>
 <blockquote>
 pip uninstall package_name</blockquote>
 <p>As the latter requires root privilegue, you need to use <tt class="docutils literal">sudo</tt> on Linux</p>
 <div class="section" id="python-library-files">
-<h3><a class="toc-backref" href="#toc-entry-12">Python Library Files</a></h3>
+<h3><a class="toc-backref" href="#id18">Python Library Files</a></h3>
 <p>All python library files of this toolkit are installed into the
 <tt class="docutils literal">gamera/toolkits/ocr</tt> subdirectory of the Python library folder.</p>
 <p>Where the python library folder is depends on your system and python version.
@@ -244,7 +252,7 @@ Here are the folders that you need to remove on MacOS X and Debian Linux
 </div>
 </div>
 <div class="section" id="about-this-documentation">
-<h1><a class="toc-backref" href="#toc-entry-13">About this documentation</a></h1>
+<h1><a class="toc-backref" href="#id19">About this documentation</a></h1>
 <p>The documentation was written by Rene Baston and Christoph Dalitz.
 Permission is granted to copy, distribute and/or modify this documentation
 under the terms of the <a class="reference external" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution Share-Alike License (CC-BY-SA) v3.0</a>. In addition, permission is granted to use and/or

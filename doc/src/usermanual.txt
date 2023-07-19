@@ -30,35 +30,35 @@ Hence the proper use of this toolkit requires the following two steps:
 .. __: http://gamera.sourceforge.net/doc/html/training_tutorial.html
 
 There are two options to use this toolkit: you can either use the 
-script ``ocr4gamera.py`` as provided by the toolkit, or you can build your
+script ``ocr4gamera`` as provided by the toolkit, or you can build your
 own recognition scripts with the aid of the python library functions
 provided by the toolkit. Both alternatives are described below.
 
 
-Using the script ``ocr4gamera.py``
-''''''''''''''''''''''''''''''''''
+Using the script ``ocr4gamera``
+'''''''''''''''''''''''''''''''
 
-The *ocr4gamera.py* script takes an image and already trained data and 
+The *ocr4gamera* script takes an image and already trained data and 
 segments the picture into single glyphs. The training-data is used to 
 classify those glyphs and converts them into strings. The final text is 
 written to standard-out or can optionally be stored in a textfile. Also 
 a word by word correction can be performed on the recognized text.
 
-The end user application *ocr4gamera.py* will be installed to ``/usr/bin`` 
+The end user application *ocr4gamera* will be installed to ``/usr/bin`` 
 unless you habe explicitly chosen a different location. It can be either
 be applied to a *single* image with the following typical call::
 
-    ocr4gamera.py x <traindata> --deskew --automatic_group -o <outfile> <imagefile>
+    ocr4gamera x <traindata> --deskew --automatic_group -o <outfile> <imagefile>
 
 or simultaneously on *multiple* images with the following typical call::
 
-    ocr4gamera.py x <traindata> --deskew --automatic_group -od <outdir> <imagefile1> <imagefile2> ...
+    ocr4gamera x <traindata> --deskew --automatic_group -od <outdir> <imagefile1> <imagefile2> ...
 
 Note that in the latter case an output *directory* must be given, into which
 the recognised texts will be written for each *<imagefile>* as
 *<outdir>/`basename <imagefile>`.txt*.
 Strictly speaking, the call modus for multiple image files is redundant,
-because the same result can be achieved by calling *ocr4gamera.py* for each
+because the same result can be achieved by calling *ocr4gamera* for each
 image file separately, but it can speed up the recognition because the 
 training data only needs to be loaded once. 
 
@@ -66,7 +66,7 @@ The options *--deskew* and *--automatic_group* in the above examples
 are optional, but useful in most cases (see below). The complete synopsis
 of the script is::
 
-    ocr4gamera.py -x <trainingdata> [options] <imagefile>
+    ocr4gamera -x <trainingdata> [options] <imagefile>
 
 Options can be in short (one dash, few characters) or long form (two dashes,
 string). When called with ``-h``, ``--help`` or an invalid option,
@@ -175,7 +175,7 @@ Writing custom scripts
 ''''''''''''''''''''''
 
 If you want to write your own scripts for recognition, you
-can use ``ocr4gamera.py`` as a good starting point.
+can use ``ocr4gamera`` as a good starting point.
 
 In order to access the *OCR Toolkit* classes and functions, you must
 import them at the beginning of your script:
