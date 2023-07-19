@@ -1,0 +1,113 @@
+Changelog of the OCR Toolkit for Gamera
+=======================================
+
+Version 2.0.0, Jul 19, 2023
+---------------------------
+
+ - ported to Python 3.x, Gamera 4.x and setuptools
+
+
+Version 1.2.2, Nov 20, 2014
+---------------------------
+
+ - handled hOCR bounding box data outside the image boundaries more gracefully
+
+
+Version 1.2.1, Oct 27, 2014
+---------------------------
+
+ - fixed a possible exception when reading hOCR files
+   (thanks to Georg Drees)
+
+
+Version 1.2.0, Sep 01, 2014
+---------------------------
+
+ - hOCR support (thanks to Fabian Schmitt):
+    o new option -hi for reading text line segmentation from hOCR file
+    o new option -ho for writing hOCR output
+
+
+Version 1.1.0, Jun 26, 2014
+---------------------------
+
+ - significant speed up of recognition process
+
+ - can now batch process several files in combination with
+   new option -od (--output_directory) to avoid loading the
+   training data for each image file
+
+
+Version 1.0.6, Feb 14, 2012
+---------------------------
+
+ - fixed some minor errors reported by Jakub Wilk
+
+ - extrachars file can contain arbitrary unicode texts
+
+ - heuristic rule for disambiguating roman letters somewhat improved
+
+
+Version 1.0.5, Sep 19, 2011
+---------------------------
+
+ - FSF address corrected
+
+
+Version 1.0.4, Jul 27, 2010
+---------------------------
+
+ - grouping of quotation marks somewhat corrected
+   (should this be removed some day?)
+
+ - more heuristic rules for disambiguation of roman characters
+
+ - heuristic rules are now choosable in ocr4gamera.py with option "-R"
+   to switch them off, use "-R none"
+
+
+Version 1.0.3, Jun 15, 2010
+---------------------------
+
+ - Option "-o" now works again
+
+
+Version 1.0.2, Jun 08, 2010
+---------------------------
+
+ - changes in recognition script "ocr4gamera.py":
+    o renamed from "ocr4gamera" to "ocr4gamera.py" (for Windows compatibility)
+    o changes in dictionary correction
+       + language choosable with option "-L"
+       + edit distance threshold choosable with option "-e"
+       + when aspell not found, ispell is tried
+    o additional translation table class_name -> character
+      can be provided in a CSV file with option "-c"
+    o option "-i" removed; replaced with verbosity level in option "-v"
+    o option "-a" for grouping of broken characters now works
+
+ - new option extra_chars_dict in functions
+   return_char() and textline_to_string()
+
+ - new plugin bbox_merging_mcmillan in analogy to roman_text
+
+ - plugin bbox_seg removed (now in the Gamera core)
+
+ - replaced the non standard module "pexpect" with "popen"
+
+
+Version 1.0.1, Feb 25, 2010
+---------------------------
+
+ - 'ocr4gamera -a' now uses the provided training file
+
+ - ocr4gamera no behaves properly when no image file given
+
+ - GPL copyright information added to all source file;
+   documentation licensed under CC-BY
+
+
+Version 1.0.0, Oct 16, 2009
+---------------------------
+
+ - first creation
