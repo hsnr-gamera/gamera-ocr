@@ -31,11 +31,12 @@ For release notes and a revision history see 'CHANGES'.
 A comprehensive overview of design, usage and customization of the OCR
 toolkit can be found in the paper
 
-    C. Dalitz, R. Baston: Optical Character Recognition with the 
-    Gamera Framework. In C. Dalitz (Ed.): "Document Image Analysis 
-    with the Gamera Framework." Schriftenreihe des Fachbereichs 
-    Elektrotechnik und Informatik, Hochschule Niederrhein, vol. 8,
-    pp. 53-65, Shaker Verlag (2009)
+>  C. Dalitz, R. Baston:
+>  [Optical Character Recognition with the  Gamera Framework.](https://lionel.kr.hsnr.de/~dalitz/data/publications/sr09-ocr-gamera.pdf)
+>  In C. Dalitz (Ed.): "Document Image Analysis 
+>  with the Gamera Framework." Schriftenreihe des Fachbereichs 
+>  Elektrotechnik und Informatik, Hochschule Niederrhein, vol. 8,
+>  pp. 53-65, Shaker Verlag (2009)
 
 For a small exmaple including training data and test images, see
 
