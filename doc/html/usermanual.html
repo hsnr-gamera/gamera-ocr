@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.12: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <title>OCR Toolkit User's Manual</title>
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
@@ -11,9 +11,9 @@
 <div class="document" id="ocr-toolkit-user-s-manual">
 <h1 class="title">OCR Toolkit User's Manual</h1>
 
-<p><strong>Last modified</strong>: July 19, 2023</p>
+<p><strong>Last modified</strong>: July 20, 2023</p>
 <div class="contents topic" id="contents">
-<p class="topic-title first">Contents</p>
+<p class="topic-title">Contents</p>
 <ul class="simple">
 <li><a class="reference internal" href="#overview" id="id5">Overview</a></li>
 <li><a class="reference internal" href="#using-the-script-ocr4gamera" id="id6">Using the script <tt class="docutils literal">ocr4gamera</tt></a></li>
@@ -170,12 +170,12 @@ the hOCR file, only the information stored in the title of the class
 can use <tt class="docutils literal">ocr4gamera</tt> as a good starting point.</p>
 <p>In order to access the <em>OCR Toolkit</em> classes and functions, you must
 import them at the beginning of your script:</p>
-<div class="highlight"><pre><span class="kn">from</span> <span class="nn">gamera.toolkits.ocr.ocr_toolkit</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">gamera.toolkits.ocr.ocr_toolkit</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">gamera.toolkits.ocr.classes</span> <span class="kn">import</span> <span class="n">Textline</span><span class="p">,</span><span class="n">Page</span><span class="p">,</span><span class="n">ClassifyCCs</span>
 </pre></div>
 <p>After that you can segment an image with the <a class="reference external" href="gamera.toolkits.ocr.classes.Page.html">Page</a> class and its
 method <em>segment()</em>:</p>
-<div class="highlight"><pre><span class="n">img</span> <span class="o">=</span> <span class="n">load_image</span><span class="p">(</span><span class="s2">&quot;image.png&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="n">img</span> <span class="o">=</span> <span class="n">load_image</span><span class="p">(</span><span class="s2">&quot;image.png&quot;</span><span class="p">)</span>
 <span class="k">if</span> <span class="n">img</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">pixel_type</span> <span class="o">!=</span> <span class="n">ONEBIT</span><span class="p">:</span>
    <span class="n">img</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">to_onebit</span><span class="p">()</span>
 <span class="n">result_page</span> <span class="o">=</span> <span class="n">Page</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
@@ -185,7 +185,7 @@ method <em>segment()</em>:</p>
 textlines, words and characters in reading order. You can then classify
 the characters line-per-line with a knn classifier and print the document
 text:</p>
-<div class="highlight"><pre><span class="c1"># load training data into classifier</span>
+<div class="highlight"><pre><span></span><span class="c1"># load training data into classifier</span>
 <span class="n">cknn</span> <span class="o">=</span> <span class="n">knn</span><span class="o">.</span><span class="n">kNNInteractive</span><span class="p">([],</span> \
           <span class="p">[</span><span class="s2">&quot;aspect_ratio&quot;</span><span class="p">,</span> <span class="s2">&quot;moments&quot;</span><span class="p">,</span> <span class="s2">&quot;volume64regions&quot;</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
 <span class="n">cknn</span><span class="o">.</span><span class="n">from_xml_filename</span><span class="p">(</span><span class="s2">&quot;trainingdata.xml&quot;</span><span class="p">)</span>
@@ -195,7 +195,7 @@ text:</p>
     <span class="n">line</span><span class="o">.</span><span class="n">glyphs</span> <span class="o">=</span> \
            <span class="n">cknn</span><span class="o">.</span><span class="n">classify_and_update_list_automatic</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">glyphs</span><span class="p">)</span>
     <span class="n">line</span><span class="o">.</span><span class="n">sort_glyphs</span><span class="p">()</span>
-    <span class="k">print</span> <span class="s2">&quot;Text of line&quot;</span><span class="p">,</span> <span class="n">textline_to_string</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="s2">&quot;Text of line&quot;</span><span class="p">,</span> <span class="n">textline_to_string</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
 </pre></div>
 <p>Note that the function <a class="reference external" href="functions.html#textline-to-string">textline_to_string</a> is global and not bound to
 a class instance. This function requires that class names for characters

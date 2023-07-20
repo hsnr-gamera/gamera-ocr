@@ -6,6 +6,11 @@ from gamera import gamera_setup
 
 # This constant should be the name of the toolkit
 TOOLKIT_NAME = "ocr"
+VERSION = "2.0.1"
+AUTHOR = "Rene Baston and Christoph Dalitz and Andreas Miller"
+HOMEPAGE = "http://gamera.sourceforge.net/"
+DESCRIPTION = "An addon OCR toolkit for the Gamera framework for document analysis and recognition."
+LICENSE = "GNU GPL version 2"
 
 # ----------------------------------------------------------------------------
 # You should not usually have to edit anything below, but it is
@@ -24,7 +29,11 @@ plugin_extensions = gamera_setup.generate_plugins(plugins, PLUGIN_PACKAGE)
 # anything more complex here, refer to the Python setuptools documentation.
 if __name__ == "__main__":
     setup(name="gamera-ocr",
-          version="2.0.0",
+          version=VERSION,
+          license=LICENSE,
+          url=HOMEPAGE,
+          author=AUTHOR,
+          description=DESCRIPTION,
           ext_modules=plugin_extensions,
           packages=[PACKAGE, PLUGIN_PACKAGE],
           include_dirs=['include/plugins'],

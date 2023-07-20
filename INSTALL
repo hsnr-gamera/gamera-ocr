@@ -15,21 +15,11 @@ Standard Build and Install
 Download the Toolkit from:
     https://gamera.informatik.hsnr.de/addons/index.html
 
-Gamera toolkits can be installed, throough pip. Open a
-terminal in the folder and type::
-
-    pip install .
-
-When using "pip install", both compilation and install are done under the
-calling user account, which will install gamera under ".local" in that
-user's home directory. If you want to install gamera system wide, you
-can either call *pip* as root.
-
-An alternative is to first create a binary "wheel package" under your
+Is to first create a binary "wheel package" under your
 user account with::
 
-  python setup.py bdist_wheel
-
+  python setup.py build bdist_wheel
+ 
 This will create a package file "gamera-version-architecture.whl" in the
 "dist" directory, which can then be installed system wide as root with:;
 
@@ -39,6 +29,7 @@ Additionally, a source code package can be created in the ``dist`` directory
 with::
 
   python setup.py sdist
+
 
 Mac OS-X
 ========

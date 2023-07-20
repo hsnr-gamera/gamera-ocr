@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.20.1: https://docutils.sourceforge.io/" />
+<meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <title>Geometry</title>
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
@@ -11,23 +11,23 @@
 <div class="document" id="geometry">
 <h1 class="title">Geometry</h1>
 
-<p><strong>Last modified</strong>: July 11, 2023</p>
+<p><strong>Last modified</strong>: July 20, 2023</p>
 <div class="contents topic" id="contents">
 <p class="topic-title">Contents</p>
 <ul class="simple">
-<li><a class="reference internal" href="#convex-hull-as-image" id="toc-entry-1"><tt class="docutils literal">convex_hull_as_image</tt></a></li>
-<li><a class="reference internal" href="#convex-hull-as-points-1" id="toc-entry-2"><tt class="docutils literal">convex_hull_as_points</tt></a></li>
-<li><a class="reference internal" href="#convex-hull-from-points" id="toc-entry-3"><tt class="docutils literal">convex_hull_from_points</tt></a></li>
-<li><a class="reference internal" href="#delaunay-from-points" id="toc-entry-4"><tt class="docutils literal">delaunay_from_points</tt></a></li>
-<li><a class="reference internal" href="#hough-lines" id="toc-entry-5"><tt class="docutils literal">hough_lines</tt></a></li>
-<li><a class="reference internal" href="#labeled-region-neighbors" id="toc-entry-6"><tt class="docutils literal">labeled_region_neighbors</tt></a></li>
-<li><a class="reference internal" href="#max-empty-rect" id="toc-entry-7"><tt class="docutils literal">max_empty_rect</tt></a></li>
-<li><a class="reference internal" href="#voronoi-from-labeled-image" id="toc-entry-8"><tt class="docutils literal">voronoi_from_labeled_image</tt></a></li>
-<li><a class="reference internal" href="#voronoi-from-points" id="toc-entry-9"><tt class="docutils literal">voronoi_from_points</tt></a></li>
+<li><a class="reference internal" href="#convex-hull-as-image" id="id6"><tt class="docutils literal">convex_hull_as_image</tt></a></li>
+<li><a class="reference internal" href="#id1" id="id7"><tt class="docutils literal">convex_hull_as_points</tt></a></li>
+<li><a class="reference internal" href="#convex-hull-from-points" id="id8"><tt class="docutils literal">convex_hull_from_points</tt></a></li>
+<li><a class="reference internal" href="#delaunay-from-points" id="id9"><tt class="docutils literal">delaunay_from_points</tt></a></li>
+<li><a class="reference internal" href="#hough-lines" id="id10"><tt class="docutils literal">hough_lines</tt></a></li>
+<li><a class="reference internal" href="#labeled-region-neighbors" id="id11"><tt class="docutils literal">labeled_region_neighbors</tt></a></li>
+<li><a class="reference internal" href="#max-empty-rect" id="id12"><tt class="docutils literal">max_empty_rect</tt></a></li>
+<li><a class="reference internal" href="#voronoi-from-labeled-image" id="id13"><tt class="docutils literal">voronoi_from_labeled_image</tt></a></li>
+<li><a class="reference internal" href="#voronoi-from-points" id="id14"><tt class="docutils literal">voronoi_from_points</tt></a></li>
 </ul>
 </div>
 <div class="section" id="convex-hull-as-image">
-<h1><a class="toc-backref" href="#toc-entry-1"><tt class="docutils literal">convex_hull_as_image</tt></a></h1>
+<h1><a class="toc-backref" href="#id6"><tt class="docutils literal">convex_hull_as_image</tt></a></h1>
 <p><tt class="docutils literal">Image</tt> [OneBit] <strong>convex_hull_as_image</strong> (<tt class="docutils literal">bool</tt> <em>filled</em> = False)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -52,8 +52,8 @@ by <a class="reference external" href="geometry.html#convex_hull_as_points">conv
 <img alt="images/OneBit_generic.png" src="images/OneBit_generic.png" style="width: 69px; height: 99px;" />
 <img alt="images/convex_hull_as_image_plugin_00.png" src="images/convex_hull_as_image_plugin_00.png" style="width: 69px; height: 99px;" />
 </div>
-<div class="section" id="convex-hull-as-points-1">
-<h1><a class="toc-backref" href="#toc-entry-2"><tt class="docutils literal">convex_hull_as_points</tt></a></h1>
+<div class="section" id="id1">
+<h1><a class="toc-backref" href="#id7"><tt class="docutils literal">convex_hull_as_points</tt></a></h1>
 <p>[object] <strong>convex_hull_as_points</strong> ()</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -80,7 +80,7 @@ right, it lies on the connection axis between two visible points and thus
 cannot be a vertex point of the convex hull.</p>
 </div>
 <div class="section" id="convex-hull-from-points">
-<h1><a class="toc-backref" href="#toc-entry-3"><tt class="docutils literal">convex_hull_from_points</tt></a></h1>
+<h1><a class="toc-backref" href="#id8"><tt class="docutils literal">convex_hull_from_points</tt></a></h1>
 <p>[object] <strong>convex_hull_from_points</strong> ([object <em>points</em>])</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -102,7 +102,7 @@ points.</p>
 <em>Introduction to Algorithms.</em> 2nd ed., MIT Press, p. 949, 2001</p>
 </div>
 <div class="section" id="delaunay-from-points">
-<h1><a class="toc-backref" href="#toc-entry-4"><tt class="docutils literal">delaunay_from_points</tt></a></h1>
+<h1><a class="toc-backref" href="#id9"><tt class="docutils literal">delaunay_from_points</tt></a></h1>
 <p>object <strong>delaunay_from_points</strong> ([object <em>points</em>], <tt class="docutils literal">IntVector</tt> <em>labels</em>)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -146,7 +146,7 @@ following example:</p>
 </pre></div>
 </div>
 <div class="section" id="hough-lines">
-<h1><a class="toc-backref" href="#toc-entry-5"><tt class="docutils literal">hough_lines</tt></a></h1>
+<h1><a class="toc-backref" href="#id10"><tt class="docutils literal">hough_lines</tt></a></h1>
 <p>object <strong>hough_lines</strong> ([object <em>points</em>], float <em>theta_min</em>, float <em>theta_step</em>, float <em>theta_max</em>, float <em>rho_min</em>, float <em>rho_step</em>, float <em>rho_max</em>, int <em>n_lines</em>, float <em>threshold</em>)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -191,7 +191,7 @@ zero, all found lines are returned.</dd>
 </dl>
 </div>
 <div class="section" id="labeled-region-neighbors">
-<h1><a class="toc-backref" href="#toc-entry-6"><tt class="docutils literal">labeled_region_neighbors</tt></a></h1>
+<h1><a class="toc-backref" href="#id11"><tt class="docutils literal">labeled_region_neighbors</tt></a></h1>
 <p>object <strong>labeled_region_neighbors</strong> (<tt class="docutils literal">bool</tt> <em>eight_connectivity</em> = True)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -242,7 +242,7 @@ as in the following example:</p>
 </pre></div>
 </div>
 <div class="section" id="max-empty-rect">
-<h1><a class="toc-backref" href="#toc-entry-7"><tt class="docutils literal">max_empty_rect</tt></a></h1>
+<h1><a class="toc-backref" href="#id12"><tt class="docutils literal">max_empty_rect</tt></a></h1>
 <p><tt class="docutils literal">Rect</tt> <strong>max_empty_rect</strong> ()</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -273,7 +273,7 @@ April 1998.</p>
 <p><img alt="max_empty_rect_plugin_00_00" src="images/max_empty_rect_plugin_00_00.png" style="width: 90px; height: 90px;" /></p>
 </div>
 <div class="section" id="voronoi-from-labeled-image">
-<h1><a class="toc-backref" href="#toc-entry-8"><tt class="docutils literal">voronoi_from_labeled_image</tt></a></h1>
+<h1><a class="toc-backref" href="#id13"><tt class="docutils literal">voronoi_from_labeled_image</tt></a></h1>
 <p><tt class="docutils literal">Image</tt> [OneBit|GreyScale] <strong>voronoi_from_labeled_image</strong> ()</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -317,7 +317,7 @@ the following code:</p>
 <p><img alt="voronoi_from_labeled_image_plugin_00_00" src="images/voronoi_from_labeled_image_plugin_00_00.png" style="width: 69px; height: 99px;" /> <img alt="voronoi_from_labeled_image_plugin_00_01" src="images/voronoi_from_labeled_image_plugin_00_01.png" style="width: 69px; height: 99px;" /></p>
 </div>
 <div class="section" id="voronoi-from-points">
-<h1><a class="toc-backref" href="#toc-entry-9"><tt class="docutils literal">voronoi_from_points</tt></a></h1>
+<h1><a class="toc-backref" href="#id14"><tt class="docutils literal">voronoi_from_points</tt></a></h1>
 <p><strong>voronoi_from_points</strong> ([object <em>points</em>], <tt class="docutils literal">IntVector</tt> <em>labels</em>)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
