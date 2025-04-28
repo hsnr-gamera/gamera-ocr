@@ -18,17 +18,17 @@ Download the Toolkit from:
 Is to first create a binary "wheel package" under your
 user account with::
 
-  python setup.py build bdist_wheel
+  python3 setup.py build bdist_wheel
  
 This will create a package file "gamera-version-architecture.whl" in the
 "dist" directory, which can then be installed system wide as root with:;
 
-  sudo pip install ./dist/gamera-*-*.whl
+  sudo pip3 install ./dist/gamera-*-*.whl
 
 Additionally, a source code package can be created in the ``dist`` directory
 with::
 
-  python setup.py sdist
+  python3 setup.py sdist
 
 
 Mac OS-X
@@ -45,7 +45,7 @@ Uninstallation
 
 The unistallation works with pip3 like the installation:
 
-	pip uninstall package_name
+	pip3 uninstall package_name
 
 As the latter requires root privilegue, you need to use ``sudo`` on Linux
 
