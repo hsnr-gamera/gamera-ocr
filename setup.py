@@ -6,7 +6,7 @@ from gamera import gamera_setup
 
 # This constant should be the name of the toolkit
 TOOLKIT_NAME = "ocr"
-VERSION = "2.0.1"
+VERSION = "2.0.2"
 AUTHOR = "Rene Baston and Christoph Dalitz and Andreas Miller"
 HOMEPAGE = "http://gamera.sourceforge.net/"
 DESCRIPTION = "An addon OCR toolkit for the Gamera framework for document analysis and recognition."

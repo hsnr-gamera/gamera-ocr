@@ -1,6 +1,12 @@
 Changelog of the OCR Toolkit for Gamera
 =======================================
 
+Version 2.0.2, Apr 28, 2025
+---------------------------
+
+ - gamera core plugins removed from docs
+
+
 Version 2.0.1, Jul 20, 2023
 ---------------------------
 

@@ -189,16 +189,17 @@ Gamera toolkits can be installed, throough pip. Open a
 terminal in the folder and type::
 
     # 1) complie
-	python3 setup.y build bdist_wheel
-	# 2) install
-	sudo pip3 install dist/gamera_ocr-*.whl
+    python3 setup.y build bdist_wheel
+    # 2) install
+    sudo pip3 install dist/gamera-ocr-*.whl
 
 Command 1) compiles the toolkit from the sources and installs it. 
 As the latter requires root privilegue, you need to use ``sudo``
 on Linux and MacOS X. On Windows, ``sudo`` is not necessary.
 
-Note that the script *ocr4gamera* is installed into ``/usr/local//bin``
-on Linux.
+Note that the script *ocr4gamera* is installed into ``/usr/local/bin``
+on Linux. All python library files of this toolkit are installed into the 
+``gamera/toolkits/ocr`` subdirectory of the Python library folder.
 
 To generate a source code package in the `dist` subdirectory, use the command
 
@@ -213,55 +214,14 @@ for convenient viewing.
    toolkit. Otherwise ``gendoc.py`` will not find the plugin documentation.
 
 
-Installing without root privileges
-----------------------------------
-
-The above installation with "pip3 install ." will install
-the toolkit system wide and thus requires root privileges. If you do
-not have root access (Linux) or are no sudoer (MacOS X), you can
-install the MusicStaves toolkit into your home directory. Note however
-that this also requires that Gamera is installed into your home directory.
-It is currently not possibole to install Gamera globally and only toolkits
-locally.
-
-Here are the steps to install both Gamera and the OCR toolkit into
-``~/python``:
-
-   # build and install the OCR toolkit locally
-   export CFLAGS=-I~/python/include/python3.x/gamera
-   pip install --install-option="--prefix=$PREFIX_PATH" package_name
-
-Moreover you should set the following environment variables in your 
-``~/.profile``:
-
-   # search path for python modules
-   export PYTHONPATH=~/python/lib/python
-
-   # search path for executables (eg. gamera_gui)
-   export PATH=~/python/bin:$PATH
-
-
 Uninstallation
 --------------
 
 The unistallation works with pip like the installation:
 
-	pip uninstall package_name
+	pip3 uninstall gamera-ocr
 
 As the latter requires root privilegue, you need to use ``sudo`` on Linux
-
-Python Library Files
-````````````````````
-
-All python library files of this toolkit are installed into the 
-``gamera/toolkits/ocr`` subdirectory of the Python library folder.
-
-
-Where the python library folder is depends on your system and python version.
-Here are the folders that you need to remove on MacOS X and Debian Linux
-("3.x" stands for the python version; replace it with your actual version):
-
-  - MacOS X: ``/Library/Python/3.x/gamera/toolkits/ocr``
 
 
 

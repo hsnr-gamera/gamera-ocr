@@ -10,6 +10,7 @@ proceeding.**
 
 Gamera can be downloaded at http://gamera.informatik.hsnr.de/
 
+
 Standard Build and Install
 --------------------------
 Download the Toolkit from:
@@ -23,7 +24,7 @@ user account with::
 This will create a package file "gamera-version-architecture.whl" in the
 "dist" directory, which can then be installed system wide as root with:;
 
-  sudo pip3 install ./dist/gamera-*-*.whl
+  sudo pip3 install ./dist/gamera_ocr-*.whl
 
 Additionally, a source code package can be created in the ``dist`` directory
 with::
@@ -31,21 +32,12 @@ with::
   python3 setup.py sdist
 
 
-Mac OS-X
-========
-
-OS-X support can be considered working but preliminary at this point.
-Gamera toolkits will only run on El Capitan( 10.11).  We do not plan to support
-earlier versions.  You will need to install the GNU development tools
-(gcc, g++, ld etc.), X11, and Python 3.5 or newer.
-
-
 Uninstallation
 --------------
 
 The unistallation works with pip3 like the installation:
 
-	pip3 uninstall package_name
+	pip3 uninstall gamera-ocr
 
 As the latter requires root privilegue, you need to use ``sudo`` on Linux
 
