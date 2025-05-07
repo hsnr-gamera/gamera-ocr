@@ -51,7 +51,7 @@ Installation is done with `pip3`, which will install a python module
 Authors
 -------
 
- - Christoph Dalitz, <christoph dot dalitz at hsnr dot de>, 2009-2023
+ - Christoph Dalitz, 2009-2025, https://lionel.kr.hsnr.de/~dalitz/
  - Andreas Miller, 2023
  - Rene Baston, 2009
 
